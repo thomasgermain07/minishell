@@ -6,28 +6,11 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/17 14:44:17 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/17 15:06:44 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void			exec_binary(char *str)
-{
-	char		**tab;
-	int			i;
-
-	i = -1;
-	tab = ft_split(str, ' ');
-	if (!fork())
-		execvp(tab[0], tab);
-	else
-		wait(NULL);
-	while (tab[++i])
-		free(tab[i]);
-	free(tab);
-	exit(0);
-}
 
 void		prompt(void)
 {
@@ -40,7 +23,7 @@ void		prompt(void)
 		get_next_line(0, &args);
 		check_pipes(args);
 		free(args);
-		system("leaks minishell");
+	//	system("leaks minishell");
 	}
 }
 

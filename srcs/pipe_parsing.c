@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 11:52:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/17 14:44:12 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/17 15:07:22 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,42 +37,52 @@ static int		get_n_pipes(char *args, int option)
 	return (n_pipes);
 }
 
-void			close_fds(int n, int fd[n][2])
+static void		handle_fd(int n, int fd[n][2], int option)
 {
 	int i;
 
 	i = -1;
-	while (++i < n)
+	if (option == 0)
 	{
-		close(fd[i][0]);
-		close(fd[i][1]);
+		while (++i < n)
+		{
+			close(fd[i][0]);
+			close(fd[i][1]);
+		}
+	}
+	else if (option == 1)
+	{
+		while (++i < n)
+			if (pipe(fd[i]) == -1)
+				exit(1);
 	}
 }
 
 static void		exec_pipes(char **tab, int n_pipe)
 {
-	int			fd[n_pipe][2]; // fd[0] read | fd[1] write
+	int			fd[n_pipe][2];
 	int			i;
+	char		**call;
 	int			j;
 
-	j = -1;
-	while (++j < n_pipe)
-		if (pipe(fd[j]) == -1)
-			exit(1);
+	handle_fd(n_pipe, fd, 1);
 	i = -1;
-	while (++i < n_pipe + 1)
+	while (++i < n_pipe + 1 && (j = -1))
 	{
+		call = ft_split(tab[i], ' ');
 		if (fork() == 0)
 		{
-			if (i != 0)
-				dup2(fd[i - 1][0], 0);
-			if (i != n_pipe)
-				dup2(fd[i][1], 1);
-			close_fds(n_pipe, fd);
-			exec_binary(tab[i]);
+			i != 0 ? dup2(fd[i - 1][0], 0) : (void)call;
+			i != n_pipe ? dup2(fd[i][1], 1) : (void)call;
+			handle_fd(n_pipe, fd, 0);
+			//exec_binary(tab[i]);
+			execvp(call[0], call);
 		}
+		while (call[++j])
+			free(call[j]);
+		free(call);
 	}
-	close_fds(n_pipe, fd);
+	handle_fd(n_pipe, fd, 0);
 	i = -1;
 	while (++i < n_pipe + 1)
 		wait(NULL);
