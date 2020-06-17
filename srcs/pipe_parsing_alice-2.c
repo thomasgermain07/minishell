@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_parsing.c                                     :+:      :+:    :+:   */
+/*   pipe_parsing_alice-2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 11:52:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/17 14:44:12 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/17 12:50:40 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "stdio.h"
+
+typedef struct {
+	int side[2];
+} t_pipe;
 
 static int		get_n_pipes(char *args, int option)
 {
@@ -37,45 +42,83 @@ static int		get_n_pipes(char *args, int option)
 	return (n_pipes);
 }
 
-void			close_fds(int n, int fd[n][2])
+static void		exec_pipes(char **tab, int i, t_pipe *tab_pipe, int nb_pipes)
 {
-	int i;
+	char		**call;
+	int j;
 
-	i = -1;
-	while (++i < n)
-	{
-		close(fd[i][0]);
-		close(fd[i][1]);
-	}
+	j = 0;
+		if (i == 0)
+		{
+
+			dup2(tab_pipe[i].side[1], 1);
+			call = ft_split(tab[i], ' ');
+			while (j < nb_pipes)
+			{
+				close(tab_pipe[j].side[0]);
+				close(tab_pipe[j].side[1]);
+				j++;
+			}
+			execvp(call[0], call);
+		}
+		else if (i == nb_pipes)
+		{
+			dup2(tab_pipe[i - 1].side[0], 0);
+			call = ft_split(tab[i], ' ');
+			while (j < nb_pipes)
+			{
+				close(tab_pipe[j].side[0]);
+				close(tab_pipe[j].side[1]);
+				j++;
+			}
+			execvp(call[0], call);
+		}
+		else
+		{
+			dup2(tab_pipe[i - 1].side[0], 0);
+			dup2(tab_pipe[i].side[1], 1);
+			call = ft_split(tab[i], ' ');
+			while (j < nb_pipes)
+			{
+				close(tab_pipe[j].side[0]);
+				close(tab_pipe[j].side[1]);
+				j++;
+			}
+			execvp(call[0], call);
+		}
 }
 
-static void		exec_pipes(char **tab, int n_pipe)
+void forks_pipes(int n, char **args)
 {
-	int			fd[n_pipe][2]; // fd[0] read | fd[1] write
-	int			i;
-	int			j;
+	int i;
+	int status;
+	i = 0;
 
-	j = -1;
-	while (++j < n_pipe)
-		if (pipe(fd[j]) == -1)
-			exit(1);
-	i = -1;
-	while (++i < n_pipe + 1)
+	t_pipe tab_pipe[n - 1];
+
+	while (i < n - 1)
+	{
+		pipe(tab_pipe[i].side);
+		i++;
+	}
+	i = 0;
+	while (i < n)
 	{
 		if (fork() == 0)
-		{
-			if (i != 0)
-				dup2(fd[i - 1][0], 0);
-			if (i != n_pipe)
-				dup2(fd[i][1], 1);
-			close_fds(n_pipe, fd);
-			exec_binary(tab[i]);
-		}
+			exec_pipes(args, i, tab_pipe, n - 1);
+		//else
+		//	wait(NULL);
+		i++;
 	}
-	close_fds(n_pipe, fd);
-	i = -1;
-	while (++i < n_pipe + 1)
-		wait(NULL);
+	i = 0;
+	while (i < n -1)
+	{
+		close(tab_pipe[i].side[0]);
+		close(tab_pipe[i].side[1]);
+		i++;
+	}
+	for (i = 0; i < n ; i++)
+		wait(&status);
 }
 
 void			check_pipes(char *args)
@@ -94,8 +137,10 @@ void			check_pipes(char *args)
 	}
 	str[i] = ft_substr(args + last_i, 0, ft_strlen(args + last_i));
 	str[i + 1] = NULL;
-	exec_pipes(str, get_n_pipes(args, 0));
-	i = -1;
-	while (str[++i])
-		free(str[i]);
+	if (get_n_pipes(args, 0) != 0)
+		forks_pipes(get_n_pipes(args, 0) + 1, str);
+	//	if (fork() == 0)
+	//		exec_pipes(str);
+//	else
+//		wait(NULL);
 }

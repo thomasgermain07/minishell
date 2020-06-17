@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/16 14:37:38 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/17 14:44:17 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void			exec_binary(char *str)
 	while (tab[++i])
 		free(tab[i]);
 	free(tab);
+	exit(0);
 }
 
 void		prompt(void)
@@ -39,6 +40,7 @@ void		prompt(void)
 		get_next_line(0, &args);
 		check_pipes(args);
 		free(args);
+		system("leaks minishell");
 	}
 }
 
