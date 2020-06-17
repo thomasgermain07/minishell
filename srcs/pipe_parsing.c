@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 11:52:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/17 15:07:22 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/17 15:09:53 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ static void		exec_pipes(char **tab, int n_pipe)
 			i != 0 ? dup2(fd[i - 1][0], 0) : (void)call;
 			i != n_pipe ? dup2(fd[i][1], 1) : (void)call;
 			handle_fd(n_pipe, fd, 0);
-			//exec_binary(tab[i]);
 			execvp(call[0], call);
 		}
 		while (call[++j])
