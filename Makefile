@@ -6,7 +6,7 @@
 #    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 08:26:20 by thgermai          #+#    #+#              #
-#    Updated: 2020/06/18 11:49:26 by thgermai         ###   ########.fr        #
+#    Updated: 2020/06/18 23:44:54 by thgermai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,9 @@ NAME = minishell
 SRCSDIR = srcs
 OBJSDIR = .objs
 SRCS = main.c\
-		pipe_parsing.c\
-		redirection.c
+		parse_call.c\
+		check_pipes.c\
+		clean_func.c
 OBJS = $(addprefix $(OBJSDIR)/, $(SRCS:.c=.o))
 DPDCS = $(OBJS:.o=.d)
 INCLUDES = -I includes/ -I libft/
@@ -30,6 +31,10 @@ opti :
 all : $(NAME)
 
 -include $(DPDCS)
+
+fg : $(LIB) $(OBJS)
+	@(gcc $(CFLAGS) -g3 -fsanitize=address $(OBJS) $(LIB) $(INCLUDES) -o $(NAME))
+	@(echo "$(NAME) created")
 
 $(NAME) : $(LIB) $(OBJS)
 	@(gcc $(CFLAGS) $(OBJS) $(LIB) $(INCLUDES) -o $(NAME))

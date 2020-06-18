@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 11:52:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 12:12:40 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 15:55:41 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,22 +72,25 @@ static void		exec_pipes(t_call *calls, int n_pipe)
 		call = ft_split((calls + i)->str, ' ');
 		if (fork() == 0)
 		{
-			if (i != 0)
-				dup2(fd[i - 1][0], 0);
-			if (i != n_pipe)
-				dup2(fd[i][1], 1);
+			/* input */
 			if ((calls + i)->in != -1)
 			{
 				dup2((calls + i)->in, 0);
 				close((calls + i)->in);
 			}
+			else if (i != 0)
+				dup2(fd[i - 1][0], 0);
+			/* output */
 			if ((calls + i)->out != -1)
 			{
 				dup2((calls + i)->out, 1);
 				close((calls + i)->out);
 			}
+			else if (i != n_pipe)
+				dup2(fd[i][1], 1);
 			handle_fd(n_pipe, fd, 0);
 			execvp(call[0], call); // a remplacer par un parsing des functions
+			ft_printf_e("function a foire\n");
 		}
 		while (call[++j])
 			free(call[j]);

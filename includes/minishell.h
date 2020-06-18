@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 12:03:21 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 23:44:21 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,19 @@
 
 typedef	struct		s_call
 {
+	char			*str;
 	int				in;
 	int				out;
-	char			*str;
 }					t_call;
 
+void				parse_call(t_call *call);
+void				exec_binary(t_call	*call);
+t_call				**check_pipes(char *str);
+int					**create_pipes(t_call **calls);
 
-void				check_pipes(char *args);
-void				exec_binary(char *str);
-void				configure_calls(t_call *calls);
+void				clean_pipes(int	**pipes);
+void				clean_calls(t_call **calls);
+// int					get_n_pipes(char *args, int option);
 
 #endif
 
