@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 11:52:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 11:09:46 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 11:53:18 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,18 @@ void			check_pipes(char *args)
 		calls[i].str = ft_substr(args + last_i, 0, get_n_pipes((args + last_i), 1));
 		last_i += ft_strlen(calls[i].str) + 1;
 		i++;
+		printf("sizeof call = %lu\n", sizeof(calls[i]));
 	}
 	calls[i].str = ft_substr(args + last_i, 0, ft_strlen(args + last_i));
+	calls[i].in = -1;
+	calls[i].out = -1;
+	printf("sizeof call = %lu\n", sizeof(calls[i]));
 	calls[i + 1].str = NULL;
 	configure_calls(calls);
+	for (int x = 0; calls[x].str; x++)
+ 		printf("%s %d %d\n", calls[x].str, calls[x].in, calls[x].out);
+	//system("leaks minishell");
+	exit(0);
 	exec_pipes(calls, get_n_pipes(args, 0));
 	i = -1;
 	while (calls[++i].str)

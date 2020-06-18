@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 10:54:54 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 11:06:25 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 11:41:28 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char		*get_file_name(char *str)
 	i = 0;
 	while (str[i] && str[i] != ' ')
 		i++;
-	return(ft_substr(str, 0, i));
+	return (ft_substr(str, 0, i));
 }
 
 static void		check_for_input(t_call *call)
@@ -33,13 +33,14 @@ static void		check_for_input(t_call *call)
 	str = NULL;
 	while (call->str[++i])
 	{
-		if (call->str[i] == '"' && i > 0 && call->str[i - 1]!= '\\')
-			in_quote == 1 ? in_quote-- : in_quote++ ;
+		if (call->str[i] == '"' && i > 0 && call->str[i - 1] != '\\')
+			in_quote == 1 ? in_quote-- : in_quote++;
 		if (call->str[i] == '<' && in_quote == 0)
 		{
 			while (call->str[++i] == ' ')
 				;
-			if ((call->in = open((str = get_file_name(&(call->str[i]))), O_RDONLY)) == -1)
+			str = get_file_name(&(call->str[i]));
+			if ((call->in = open(str, O_RDONLY)) == -1)
 				exit(5);
 			free(str);
 		}
@@ -57,15 +58,16 @@ static void		check_for_output(t_call *call)
 	str = NULL;
 	while (call->str[++i])
 	{
-		if (call->str[i] == '"' && i > 0 && call->str[i - 1]!= '\\')
-			in_quote == 1 ? in_quote-- : in_quote++ ;
+		if (call->str[i] == '"' && i > 0 && call->str[i - 1] != '\\')
+			in_quote == 1 ? in_quote-- : in_quote++;
 		if (call->str[i] == '>' && in_quote == 0)
 		{
 			if (call->str[i + 1] == '>' && (i += 1))
 			{
 				while (call->str[++i] == ' ')
-				;
-				if ((call->out = open((str = get_file_name(&(call->str[i]))), O_RDWR | O_APPEND | O_CREAT)) == -1)
+					;
+				str = get_file_name(&(call->str[i]));
+				if ((call->out = open(str, O_RDWR | O_APPEND | O_CREAT)) == -1)
 					exit(6);
 				free(str);
 			}
@@ -73,7 +75,8 @@ static void		check_for_output(t_call *call)
 			{
 				while (call->str[++i] == ' ')
 					;
-				if ((call->out = open((str = get_file_name(&(call->str[i]))), O_RDWR | O_CREAT)) == -1)
+				str = get_file_name(&(call->str[i]));
+				if ((call->out = open(str, O_RDWR | O_CREAT)) == -1)
 					exit(7);
 				free(str);
 			}
@@ -96,15 +99,18 @@ void			configure_calls(t_call *calls)
 		j = -1;
 		check_for_input((calls + i));
 		check_for_output((calls + i));
-		str = ft_strdup((calls + i)->str);
-		free((calls + i)->str);
-		while (str[++j])
+		printf("post check\n");
+		while ((calls + i)->str[++j])
 		{
-			if (str[j] == '"' && i > 0 && str[j - 1]!= '\\')
-				in_quote == 1 ? in_quote-- : in_quote++ ;
-			if (str[j] == '<' || str[j] == '>')
+			if ((calls + i)->str[j] == '"' && i > 0 && (calls + i)->str[j - 1] != '\\')
+				in_quote == 1 ? in_quote-- : in_quote++;
+			if ((calls + i)->str[j] == '<' || (calls + i)->str[j] == '>')
+			{
+				str = ft_strdup((calls + i)->str);
+				free((calls + i)->str);
 				(calls + i)->str = ft_substr(str, 0, j);
+				free(str);
+			}
 		}
-		free(str);
 	}
 }

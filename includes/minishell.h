@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/17 18:11:15 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 11:49:11 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 typedef	struct		s_call
 {
-	char			*str;
 	int				in;
 	int				out;
+	char			*str;
 }					t_call;
 
 
