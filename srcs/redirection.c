@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 10:54:54 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 11:41:28 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 12:05:05 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ static void		check_for_input(t_call *call)
 				;
 			str = get_file_name(&(call->str[i]));
 			if ((call->in = open(str, O_RDONLY)) == -1)
-				exit(5);
+			{
+				ft_printf_e("Error: %s\n", strerror(errno));
+				exit(10);
+			}
 			free(str);
 		}
 	}
@@ -68,7 +71,10 @@ static void		check_for_output(t_call *call)
 					;
 				str = get_file_name(&(call->str[i]));
 				if ((call->out = open(str, O_RDWR | O_APPEND | O_CREAT)) == -1)
-					exit(6);
+				{
+					ft_printf_e("Error: %s\n", strerror(errno));
+					exit(11);
+				}
 				free(str);
 			}
 			else
@@ -77,7 +83,10 @@ static void		check_for_output(t_call *call)
 					;
 				str = get_file_name(&(call->str[i]));
 				if ((call->out = open(str, O_RDWR | O_CREAT)) == -1)
-					exit(7);
+				{
+					ft_printf_e("Error: %s\n", strerror(errno));
+					exit(12);
+				}
 				free(str);
 			}
 		}
@@ -99,7 +108,6 @@ void			configure_calls(t_call *calls)
 		j = -1;
 		check_for_input((calls + i));
 		check_for_output((calls + i));
-		printf("post check\n");
 		while ((calls + i)->str[++j])
 		{
 			if ((calls + i)->str[j] == '"' && i > 0 && (calls + i)->str[j - 1] != '\\')

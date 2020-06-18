@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 11:49:11 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 12:03:21 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "../libft/libft.h"
 # include <unistd.h>
 # include <fcntl.h>
+# include <errno.h>
+# include <string.h>
 // temporary lib
 # include <stdio.h>
 
