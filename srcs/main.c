@@ -6,13 +6,13 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/17 15:06:44 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 10:55:22 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void		prompt(void)
+void			prompt(void)
 {
 	char *args;
 

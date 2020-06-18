@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 11:52:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/17 15:09:53 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/18 11:09:46 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void		handle_fd(int n, int fd[n][2], int option)
 	}
 }
 
-static void		exec_pipes(char **tab, int n_pipe)
+static void		exec_pipes(t_call *calls, int n_pipe)
 {
 	int			fd[n_pipe][2];
 	int			i;
@@ -69,13 +69,15 @@ static void		exec_pipes(char **tab, int n_pipe)
 	i = -1;
 	while (++i < n_pipe + 1 && (j = -1))
 	{
-		call = ft_split(tab[i], ' ');
+		call = ft_split((calls + i)->str, ' ');
 		if (fork() == 0)
 		{
-			i != 0 ? dup2(fd[i - 1][0], 0) : (void)call;
-			i != n_pipe ? dup2(fd[i][1], 1) : (void)call;
+			if (i != 0)
+				dup2(fd[i - 1][0], 0);
+			if (i != n_pipe)
+				dup2(fd[i][1], 1);
 			handle_fd(n_pipe, fd, 0);
-			execvp(call[0], call);
+			execvp(call[0], call); // a remplacer par un parsing des functions
 		}
 		while (call[++j])
 			free(call[j]);
@@ -89,7 +91,7 @@ static void		exec_pipes(char **tab, int n_pipe)
 
 void			check_pipes(char *args)
 {
-	char		*str[get_n_pipes(args, 0) + 2];
+	t_call		calls[get_n_pipes(args, 0) + 2];
 	int			i;
 	int			last_i;
 
@@ -97,14 +99,17 @@ void			check_pipes(char *args)
 	last_i = 0;
 	while (get_n_pipes((args + last_i), 1))
 	{
-		str[i] = ft_substr(args + last_i, 0, get_n_pipes((args + last_i), 1));
-		last_i += ft_strlen(str[i]) + 1;
+		calls[i].in = -1;
+		calls[i].out = -1;
+		calls[i].str = ft_substr(args + last_i, 0, get_n_pipes((args + last_i), 1));
+		last_i += ft_strlen(calls[i].str) + 1;
 		i++;
 	}
-	str[i] = ft_substr(args + last_i, 0, ft_strlen(args + last_i));
-	str[i + 1] = NULL;
-	exec_pipes(str, get_n_pipes(args, 0));
+	calls[i].str = ft_substr(args + last_i, 0, ft_strlen(args + last_i));
+	calls[i + 1].str = NULL;
+	configure_calls(calls);
+	exec_pipes(calls, get_n_pipes(args, 0));
 	i = -1;
-	while (str[++i])
-		free(str[i]);
+	while (calls[++i].str)
+		free(calls[i].str);
 }
