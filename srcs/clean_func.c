@@ -6,35 +6,29 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 23:48:20 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/19 10:53:00 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void			clean_calls(t_call **calls)
+void			clean_calls(t_call *calls)
 {
 	int			i;
 
 	i = -1;
-	while (calls[++i])
-	{
-		free(calls[i]->str);
-		free(calls[i]);
-	}
-	free(calls);
+	while ((calls +  ++i)->str)
+		free((calls + i)->str);
 }
 
-void			clean_pipes(int **pipes)
+void			clean_pipes(int pipes[][2], int size)
 {
 	int			i;
 
 	i = -1;
-	while (pipes[++i])
+	while (++i < size)
 	{
 		close(pipes[i][0]);
 		close(pipes[i][1]);
-		free(pipes[i]);
 	}
-	free(pipes);
 }

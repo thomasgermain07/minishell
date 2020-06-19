@@ -6,13 +6,13 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 21:49:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 23:42:52 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/19 11:11:30 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int		get_n_pipes(char *args, int option)
+int			get_n_pipes(char *args, int option)
 {
 	int			i;
 	int			in_quote;
@@ -37,56 +37,42 @@ static int		get_n_pipes(char *args, int option)
 	return (n_pipes);
 }
 
-t_call			**check_pipes(char *str)
+void			check_pipes(char *str, t_call *calls)
 {
-	t_call		**calls;
 	int			i;
 	int			last_i;
 
 	last_i = 0;
-	i = get_n_pipes(str, 0) + 1;
-	if (!(calls = malloc(sizeof(t_call *) * (i + 1))))
-		exit(1);
-	while (i > 0)
-		if (!(calls[--i] = malloc(sizeof(t_call))))
-			exit(1);
+	i = 0;
 	while (get_n_pipes(str + last_i, 1))
 	{
-		calls[i]->str = ft_substr(str + last_i, 0,
+		(calls + i)->str = ft_substr(str + last_i, 0,
 			get_n_pipes(str + last_i, 1));
-		last_i += ft_strlen(calls[i]->str) + 1;
+		last_i += ft_strlen((calls + i)->str) + 1;
 		i++;
 	}
-	calls[i]->str = ft_substr(str + last_i, 0, ft_strlen(str + last_i));
-	calls[i + 1] = NULL;
-	return (calls);
+	(calls + i)->str = ft_substr(str + last_i, 0, ft_strlen(str + last_i));
+	(calls + (i + 1))->str = NULL;
 }
 
-int				**create_pipes(t_call **calls)
+void			create_pipes(t_call *calls, int pipes[][2])
 {
-	int			**fd;
 	int			i;
 	int			size;
 
 	i = 0;
-	while (calls[i])
+	while ((calls + i)->str)
 		i++;
 	size = --i;
 	if (size == 0)
-		return (NULL);
-	if (!(fd = malloc(sizeof(int *) * (size + 1))))
-		exit(1);
-	while (i > 0)
-		if (!(fd[--i] = malloc(sizeof(int[2]))))
-			exit(1);
-	while (i < size)
+		return ;
+	i = -1;
+	while (++i < size)
 	{
-		if (pipe(fd[i++]) == -1)
+		if (pipe(pipes[i]) == -1)
 		{
 			ft_printf_e("Error: pipe creation failed\n");
 			exit(0);
 		}
 	}
-	fd[i] = NULL;
-	return (fd);
 }

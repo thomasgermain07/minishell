@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 23:47:14 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/19 11:05:40 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,23 @@ void			exec_binary(t_call	*call)
 
 void			parse_input(char *str)
 {
-	t_call		**calls;
-	int			**pipes;
+	t_call		calls[get_n_pipes(str, 0) + 2];
+	int			pipes[get_n_pipes(str, 0)][2];
 	int			i;
 
 	i = -1;
-	calls = check_pipes(str);
-	while (calls[++i])
-		parse_call(calls[i]);
-	pipes = create_pipes(calls);
+	check_pipes(str, calls);
+	while (calls[++i].str)
+		parse_call(&calls[i]);
+	for (int x = 0; calls[x].str; x++)
+		printf("%s %d %d\n", calls[x].str, calls[x].in, calls[x].out);
+	if (i > 0)
+		create_pipes(calls, pipes);
 	/* if pipes branchez les pipes */
 	/* exec_binary */
-	/* clean pipes */
 	clean_calls(calls);
-	if (pipes)
-		clean_pipes(pipes);
+	if (pipes[0])
+		clean_pipes(pipes, get_n_pipes(str, 0));
 }
 
 // void			prompt(void)
@@ -72,8 +74,9 @@ int			main(void)
 //	prompt();
 	char *str;
 
-	str = ft_strdup("grep main < srcs/main.c  | echo test > txt.txt  | echo test > txt.txt  | echo test > txt.txt ");
+	str = ft_strdup("grep main < srcs/main.c  | echo test > txt.txt  | echo test | echo test > txt.txt ");
 	parse_input(str);
+
 	printf("\n\nLeaving minishell\n\n");
 	system("leaks minishell");
 	return (0);
