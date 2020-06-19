@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 21:49:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/19 11:11:30 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/19 11:51:25 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,26 @@ void			create_pipes(t_call *calls, int pipes[][2])
 			ft_printf_e("Error: pipe creation failed\n");
 			exit(0);
 		}
+	}
+}
+
+void			connect_pipes(t_call *calls, int pipes[][2])
+{
+	int			i;
+	t_call		*call;
+
+	i = -1;
+	call = NULL;
+	while ((calls + ++i)->str)
+	{
+		call = (calls + i);
+		if (call->in != 0)
+			;
+		else if (call->in == 0 && i != 0)
+			call->in = pipes[i - 1][0];
+		if (call->out != 1)
+			;
+		else if (call->out == 1 && pipes[i + 1][0])
+			call->out = pipes[i][1];
 	}
 }

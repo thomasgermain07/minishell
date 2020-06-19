@@ -1,0 +1,6 @@
+MINISHELL -> Makefile
+includes
+libft
+minishell
+srcs
+text.txt
