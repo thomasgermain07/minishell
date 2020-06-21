@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 16:15:55 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/18 21:55:39 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/21 14:56:47 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int		get_fd(char *str, int option)
 	return (fd);
 }
 
-static int		check_input(t_call *call)
+static int		check_input(t_call *call) // int i
 {
 	int			i;
 	int			in_quote;
@@ -55,8 +55,9 @@ static int		check_input(t_call *call)
 			in_quote == 1 ? in_quote-- : in_quote++;
 		if (call->str[i] == '<' && !in_quote)
 		{
-			if ((call->in = get_fd(&call->str[i + 1], 1)) == -1)
+			if ((call->in = get_fd(&call->str[i + 1], 1)) == -1) // ajouter a la liste chainer
 				exit(5);
+			// check_input(call, i);
 			return (1);
 		}
 	}

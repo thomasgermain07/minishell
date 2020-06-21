@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/21 14:07:35 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/21 14:45:47 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ typedef	struct		s_call
 	char			*str;
 	int				in;
 	int				out;
+	t_list			**input;
+	t_list			**output;
 }					t_call;
 
 void				parse_call(t_call *call);

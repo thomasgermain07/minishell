@@ -6,12 +6,11 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/21 14:07:44 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/21 14:52:59 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 void			exec_binary(t_call	*call, int pipes[][2], int size)
 {
@@ -64,8 +63,6 @@ void			parse_input(char *str)
 	while (++i < get_n_pipes(str, 0) + 1)
 		wait(NULL);
 	clean_calls(calls);
-	if (pipes[0])
-		close_pipes(pipes, get_n_pipes(str, 0));
 }
 
 void			prompt(void)
