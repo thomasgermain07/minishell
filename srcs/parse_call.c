@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 16:15:55 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/21 14:56:47 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/21 16:56:51 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,26 @@ static int		get_fd(char *str, int option)
 	return (fd);
 }
 
-static int		check_input(t_call *call) // int i
+static int		check_input(t_call *call, int i) // int i
 {
-	int			i;
 	int			in_quote;
+	int			fd;
+	t_list		*new_fd;
 
-	i = -1;
 	in_quote = 0;
+	new_fd = NULL;
 	while (call->str[++i])
 	{
 		if (call->str[i] == '"' && i > 0 && call->str[i - 1] != '\\')
 			in_quote == 1 ? in_quote-- : in_quote++;
 		if (call->str[i] == '<' && !in_quote)
 		{
-			if ((call->in = get_fd(&call->str[i + 1], 1)) == -1) // ajouter a la liste chainer
+			if ((fd = get_fd(&call->str[i + 1], 1)) == -1)
 				exit(5);
-			// check_input(call, i);
+			if (!(new_fd = malloc(sizeof(t_list) * 1)))
+				exit(1);
+			ft_lstadd_back(call->input, new_fd);
+			check_input(call, i);
 			return (1);
 		}
 	}
@@ -116,7 +120,7 @@ static void		get_args(t_call *call)
 
 void			parse_call(t_call *call)
 {
-	if (!check_input(call))
+	if (!check_input(call, -1))
 		call->in = 0;
 	if (!check_output(call))
 		call->out = 1;

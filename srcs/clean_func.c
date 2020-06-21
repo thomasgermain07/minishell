@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/21 14:07:27 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/21 17:00:00 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,3 +32,24 @@ void			close_pipes(int pipes[][2], int size)
 		close(pipes[i][1]);
 	}
 }
+
+/*
+
+{
+    "explorer.confirmDragAndDrop": false,
+    "files.autoSave": "onFocusChange",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false,
+    "editor.renderWhitespace": "none",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "editor.minimap.enabled": false,
+    "explorer.confirmDelete": false,
+    "window.zoomLevel": 0,
+    "42header.email": "thgermai@student.42.fr",
+    "42header.username": "thgermai",
+    "workbench.startupEditor": "newUntitledFile"
+}
+
+
+*/
