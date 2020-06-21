@@ -6,52 +6,39 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/19 14:47:36 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/21 14:07:44 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void			close_pipes(int pipes[][2], int size)
-{
-	int			i;
-
-	i = -1;
-	while (++i < size)
-	{
-		close(pipes[i][0]);
-		close(pipes[i][1]);
-	}
-}
 
 void			exec_binary(t_call	*call, int pipes[][2], int size)
 {
 	char		**func;
 	int			i;
-	int			j;
 
 	i = -1;
-	while((call + ++i)->str && (j = -1))
+	func = ft_split(call->str, ' '); // A remplacer par un parse d'arg : "", etc
+	if (fork() == 0)
 	{
-		func = ft_split((call + i)->str, ' '); // A remplacer par un parse d'arg : "", etc
-		if ((call + i)->in != 0)
-			dup2((call + i)->in, 0);
-		if ((call + i)->out != 1)
-			dup2((call + i)->out, 1);
-		if (fork() == 0)
+		if (call->in != 0)
 		{
-			close_pipes(pipes, size);
-			execvp(func[0], func); // A remplacer par un parse de function
-			ft_printf_e("Error: execvp failed\n");
+			dup2(call->in, 0);
+			close(call->in);
 		}
-		while (func[++j])
-			free(func[j]);
-		free(func);
+		if (call->out != 1)
+		{
+			dup2(call->out, 1);
+			close(call->out);
+		}
+		close_pipes(pipes, size);
+		execvp(func[0], func); // A remplacer par un parse de function
+		ft_printf_e("Error: execvp: %s\n", strerror(errno));
 	}
-	close_pipes(pipes, size);
-	i = -1;
-	while (++i < size + 1)
-		wait(NULL);
+	while (func[++i])
+		free(func[i]);
+	free(func);
 }
 
 void			parse_input(char *str)
@@ -69,14 +56,16 @@ void			parse_input(char *str)
 	i = -1;
 	while (calls[++i].str)
 		connect_pipes(calls, pipes);
-	exec_binary(calls, pipes, get_n_pipes(str, 0));
-	//for (int x = 0; calls[x].str; x++)
-		//printf("%s %d %d\n", calls[x].str, calls[x].in, calls[x].out);
-
+	i = -1;
+	while (calls[++i].str)
+		exec_binary(&calls[i], pipes, get_n_pipes(str, 0));
 	close_pipes(pipes, get_n_pipes(str, 0));
+	i = -1;
+	while (++i < get_n_pipes(str, 0) + 1)
+		wait(NULL);
 	clean_calls(calls);
 	if (pipes[0])
-		clean_pipes(pipes, get_n_pipes(str, 0));
+		close_pipes(pipes, get_n_pipes(str, 0));
 }
 
 void			prompt(void)

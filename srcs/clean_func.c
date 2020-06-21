@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/19 10:53:00 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/21 14:07:27 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			clean_calls(t_call *calls)
 		free((calls + i)->str);
 }
 
-void			clean_pipes(int pipes[][2], int size)
+void			close_pipes(int pipes[][2], int size)
 {
 	int			i;
 
