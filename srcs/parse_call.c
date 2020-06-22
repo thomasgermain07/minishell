@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 16:15:55 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/21 16:56:51 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/22 11:03:06 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,21 @@ static int		get_fd(char *str, int option)
 	return (fd);
 }
 
-static int		check_input(t_call *call, int i) // int i
+static int		check_input(t_call *call, int i)
 {
 	int			in_quote;
-	int			fd;
-	t_list		*new_fd;
 
 	in_quote = 0;
-	new_fd = NULL;
 	while (call->str[++i])
 	{
 		if (call->str[i] == '"' && i > 0 && call->str[i - 1] != '\\')
 			in_quote == 1 ? in_quote-- : in_quote++;
 		if (call->str[i] == '<' && !in_quote)
 		{
-			if ((fd = get_fd(&call->str[i + 1], 1)) == -1)
+			if (call->in != -1)
+				close(call->in);
+			if ((call->in = get_fd(&call->str[i + 1], 1)) == -1)
 				exit(5);
-			if (!(new_fd = malloc(sizeof(t_list) * 1)))
-				exit(1);
-			ft_lstadd_back(call->input, new_fd);
 			check_input(call, i);
 			return (1);
 		}
@@ -68,12 +64,10 @@ static int		check_input(t_call *call, int i) // int i
 	return (0);
 }
 
-static int		check_output(t_call *call)
+static int		check_output(t_call *call, int i)
 {
-	int			i;
 	int			in_quote;
 
-	i = -1;
 	in_quote = 0;
 	while (call->str[++i])
 	{
@@ -81,14 +75,16 @@ static int		check_output(t_call *call)
 			in_quote == 1 ? in_quote-- : in_quote++;
 		if (call->str[i] == '>' && !in_quote)
 		{
+			if (call->out != -1)
+				close(call->out);
 			if (call->str[i + 1] == '>')
 			{
 				if ((call->out = get_fd(&call->str[i + 2], 3)) == -1)
 					exit(7);
-				return (1);
 			}
 			else if ((call->out = get_fd(&call->str[i + 1], 2)) == -1)
 				exit(6);
+			check_output(call, i);
 			return (1);
 		}
 	}
@@ -120,9 +116,11 @@ static void		get_args(t_call *call)
 
 void			parse_call(t_call *call)
 {
+	call->in = -1;
+	call->out = -1;
 	if (!check_input(call, -1))
 		call->in = 0;
-	if (!check_output(call))
+	if (!check_output(call, -1))
 		call->out = 1;
 	get_args(call);
 }
