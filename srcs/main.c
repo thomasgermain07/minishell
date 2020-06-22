@@ -6,41 +6,13 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/21 14:52:59 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/22 14:47:21 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void			exec_binary(t_call	*call, int pipes[][2], int size)
-{
-	char		**func;
-	int			i;
-
-	i = -1;
-	func = ft_split(call->str, ' '); // A remplacer par un parse d'arg : "", etc
-	if (fork() == 0)
-	{
-		if (call->in != 0)
-		{
-			dup2(call->in, 0);
-			close(call->in);
-		}
-		if (call->out != 1)
-		{
-			dup2(call->out, 1);
-			close(call->out);
-		}
-		close_pipes(pipes, size);
-		execvp(func[0], func); // A remplacer par un parse de function
-		ft_printf_e("Error: execvp: %s\n", strerror(errno));
-	}
-	while (func[++i])
-		free(func[i]);
-	free(func);
-}
-
-void			parse_input(char *str)
+void			parse_input(char *str, char **env)
 {
 	t_call		calls[get_n_pipes(str, 0) + 2];
 	int			pipes[get_n_pipes(str, 0)][2];
@@ -49,7 +21,7 @@ void			parse_input(char *str)
 	i = -1;
 	check_pipes(str, calls);
 	while (calls[++i].str)
-		parse_call(&calls[i]);
+		parse_call(&calls[i], env);
 	if (i > 0)
 		create_pipes(calls, pipes);
 	i = -1;
@@ -65,7 +37,7 @@ void			parse_input(char *str)
 	clean_calls(calls);
 }
 
-void			prompt(void)
+void			prompt(char **env)
 {
 	char *args;
 
@@ -74,13 +46,15 @@ void			prompt(void)
 	{
 		ft_printf("MINISHELL -> ");
 		get_next_line(0, &args);
-		parse_input(args);
+		parse_input(args, env);
 		free(args);
 	}
 }
 
-int			main(void)
+int			main(int ac, char **av, char **env)
 {
-	prompt();
+	(void)ac;
+	(void)av;
+	prompt(env);
 	return (0);
 }

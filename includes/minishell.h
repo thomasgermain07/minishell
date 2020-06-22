@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/22 11:00:35 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/22 15:28:10 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "../libft/libft.h"
 # include <unistd.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include <fcntl.h>
 # include <errno.h>
 # include <string.h>
@@ -26,10 +28,13 @@ typedef	struct		s_call
 	char			*str;
 	int				in;
 	int				out;
+	char			**env;
 }					t_call;
 
+// exec_binary.c
+void				exec_binary(t_call	*call, int pipes[][2], int size);
 // parse_call.c
-void				parse_call(t_call *call);
+void				parse_call(t_call *call, char **env);
 // check_n_pipes.c
 int					get_n_pipes(char *args, int option);
 void				check_pipes(char *str, t_call *calls);

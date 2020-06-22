@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 16:15:55 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/22 11:03:06 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/22 14:21:38 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,9 @@ static void		get_args(t_call *call)
 	}
 }
 
-void			parse_call(t_call *call)
+void			parse_call(t_call *call, char **env)
 {
+	call->env = env;
 	call->in = -1;
 	call->out = -1;
 	if (!check_input(call, -1))
