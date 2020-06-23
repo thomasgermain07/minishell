@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/22 14:47:21 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/23 11:13:25 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ void			prompt(char **env)
 	args = NULL;
 	while (1)
 	{
-		ft_printf("MINISHELL -> ");
+		ft_printf("MINISHELL 👉 ");
 		get_next_line(0, &args);
-		parse_input(args, env);
+		if (fork() == 0)
+			parse_input(args, env);
+		wait(NULL);
 		free(args);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/22 15:28:10 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/23 11:15:03 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <string.h>
+
 // temporary lib
 # include <stdio.h>
 
@@ -43,7 +44,6 @@ void				connect_pipes(t_call *calls, int pipes[][2]);
 // clean_func.c
 void				close_pipes(int	pipes[][2], int size);
 void				clean_calls(t_call *calls);
-
 
 #endif
 
