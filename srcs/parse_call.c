@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 16:15:55 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/22 14:21:38 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/25 00:15:30 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,17 @@ static int		get_fd(char *str, int option)
 static int		check_input(t_call *call, int i)
 {
 	int			in_quote;
+	int			in_dquote;
 
 	in_quote = 0;
+	in_dquote = 0;
 	while (call->str[++i])
 	{
 		if (call->str[i] == '"' && i > 0 && call->str[i - 1] != '\\')
+			in_dquote == 1 ? in_dquote-- : in_dquote++;
+		else if (call->str[i] == '\'' && i > 0 && call->str[i - 1] != '\\')
 			in_quote == 1 ? in_quote-- : in_quote++;
-		if (call->str[i] == '<' && !in_quote)
+		else if (call->str[i] == '<' && !in_quote && !in_dquote)
 		{
 			if (call->in != -1)
 				close(call->in);
@@ -67,17 +71,21 @@ static int		check_input(t_call *call, int i)
 static int		check_output(t_call *call, int i)
 {
 	int			in_quote;
+	int			in_dquote;
 
 	in_quote = 0;
+	in_dquote = 0;
 	while (call->str[++i])
 	{
 		if (call->str[i] == '"' && i > 0 && call->str[i - 1] != '\\')
+			in_dquote == 1 ? in_dquote-- : in_dquote++;
+		else if (call->str[i] == '\'' && i > 0 && call->str[i - 1] != '\\')
 			in_quote == 1 ? in_quote-- : in_quote++;
-		if (call->str[i] == '>' && !in_quote)
+		else if (call->str[i] == '>' && !in_quote && !in_dquote)
 		{
 			if (call->out != -1)
 				close(call->out);
-			if (call->str[i + 1] == '>')
+			if (call->str[i + 1] && call->str[i + 1] == '>')
 			{
 				if ((call->out = get_fd(&call->str[i + 2], 3)) == -1)
 					exit(7);
@@ -114,7 +122,7 @@ static void		get_args(t_call *call)
 	}
 }
 
-void			parse_call(t_call *call, char **env)
+void			parse_call(t_call *call, t_list **env)
 {
 	call->env = env;
 	call->in = -1;

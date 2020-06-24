@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/23 11:15:03 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/25 00:24:15 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <sys/wait.h>
+# include <stdlib.h>
 # include <fcntl.h>
 # include <errno.h>
 # include <string.h>
@@ -29,27 +31,35 @@ typedef	struct		s_call
 	char			*str;
 	int				in;
 	int				out;
-	char			**env;
+	t_list			**env;
+	int				ret;
 }					t_call;
 
 // exec_binary.c
-void				exec_binary(t_call	*call, int pipes[][2], int size);
+pid_t				exec_binary(t_call	*call, int pipes[][2], int size);
 // parse_call.c
-void				parse_call(t_call *call, char **env);
+void				parse_call(t_call *call, t_list **env);
 // check_n_pipes.c
 int					get_n_pipes(char *args, int option);
 void				check_pipes(char *str, t_call *calls);
 void				create_pipes(t_call *calls, int pipes[][2]);
 void				connect_pipes(t_call *calls, int pipes[][2]);
-// clean_func.c
+// utiles_func.c
 void				close_pipes(int	pipes[][2], int size);
 void				clean_calls(t_call *calls);
+char				*get_cwd(void);
+t_list				**tab_to_list(char **env);
+char				**list_to_tab(t_list **lst);
+void				clean_array(char **array);
+char				*find_value(char *str, t_list **env);
+// parse_func.c
+char				**parse_func(char *str);
 
 #endif
 
 /*
 	NOTES :
 
-	- ajouter char **env au main pour recup les variables d'env
-	- check avec stat si le binaire existe
+	- Parsing all env var has to be done before everything cause it
+		can be used for redirection for exemple
 */

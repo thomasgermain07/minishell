@@ -6,54 +6,73 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/23 11:13:25 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/25 00:37:31 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void			parse_input(char *str, char **env)
+static void		wait_pids(pid_t *pids, int size, t_call *calls)
+{
+	int			i;
+	int			status;
+
+	i = -1;
+	while (++i < size)
+	{
+		waitpid(pids[i], &status, 0);
+		if (WIFEXITED(status))
+			calls[i].ret = WEXITSTATUS(status);
+	}
+}
+
+static void		parse_input(char *str, t_list **env)
 {
 	t_call		calls[get_n_pipes(str, 0) + 2];
 	int			pipes[get_n_pipes(str, 0)][2];
+	pid_t		pids[get_n_pipes(str, 0) + 1];
 	int			i;
 
 	i = -1;
 	check_pipes(str, calls);
 	while (calls[++i].str)
 		parse_call(&calls[i], env);
-	if (i > 0)
+	if (i > 1)
 		create_pipes(calls, pipes);
 	i = -1;
 	while (calls[++i].str)
 		connect_pipes(calls, pipes);
 	i = -1;
 	while (calls[++i].str)
-		exec_binary(&calls[i], pipes, get_n_pipes(str, 0));
+		pids[i] = exec_binary(&calls[i], pipes, get_n_pipes(str, 0));
 	close_pipes(pipes, get_n_pipes(str, 0));
-	i = -1;
-	while (++i < get_n_pipes(str, 0) + 1)
-		wait(NULL);
+	wait_pids(pids, get_n_pipes(str, 0) + 1, calls);
 	clean_calls(calls);
+	exit(0);
 }
 
 void			prompt(char **env)
 {
-	char *args;
+	char		*args;
+	t_list		**list;
 
+	list = tab_to_list(env);
 	args = NULL;
 	while (1)
 	{
-		ft_printf("MINISHELL 👉 ");
+		ft_printf("\033[1;32mMINISHELL \033[0m 👉 ");
 		get_next_line(0, &args);
-		if (fork() == 0)
-			parse_input(args, env);
-		wait(NULL);
+		if (ft_strlen(args))
+		{
+			if (fork() == 0)
+				parse_input(args, list);
+			wait(NULL);
+		}
 		free(args);
 	}
 }
 
-int			main(int ac, char **av, char **env)
+int				main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;

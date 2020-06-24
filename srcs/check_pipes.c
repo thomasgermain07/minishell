@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 21:49:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/22 10:58:38 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/23 22:14:42 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ void			check_pipes(char *str, t_call *calls)
 	i = 0;
 	while (get_n_pipes(str + last_i, 1))
 	{
-		(calls + i)->str = ft_substr(str + last_i, 0,
+		calls[i].str = ft_substr(str + last_i, 0,
 			get_n_pipes(str + last_i, 1));
-		last_i += ft_strlen((calls + i)->str) + 1;
+		last_i += ft_strlen(calls[i].str) + 1;
 		i++;
 	}
-	(calls + i)->str = ft_substr(str + last_i, 0, ft_strlen(str + last_i));
-	(calls + (i + 1))->str = NULL;
+	calls[i].str = ft_substr(str + last_i, 0, ft_strlen(str + last_i));
+	calls[i + 1].str = NULL;
 }
 
 void			create_pipes(t_call *calls, int pipes[][2])
@@ -61,7 +61,7 @@ void			create_pipes(t_call *calls, int pipes[][2])
 	int			size;
 
 	i = 0;
-	while ((calls + i)->str)
+	while (calls[i].str)
 		i++;
 	size = --i;
 	if (size == 0)
@@ -80,20 +80,17 @@ void			create_pipes(t_call *calls, int pipes[][2])
 void			connect_pipes(t_call *calls, int pipes[][2])
 {
 	int			i;
-	t_call		*call;
 
 	i = -1;
-	call = NULL;
-	while ((calls + ++i)->str)
+	while (calls[++i].str)
 	{
-		call = (calls + i);
-		if (call->in != 0)
+		if (calls[i].in != 0)
 			;
-		else if (call->in == 0 && i != 0)
-			call->in = pipes[i - 1][0];
-		if (call->out != 1)
+		else if (calls[i].in == 0 && i != 0)
+			calls[i].in = pipes[i - 1][0];
+		if (calls[i].out != 1)
 			;
-		else if (call->out == 1 && pipes[i + 1][0])
-			call->out = pipes[i][1];
+		else if (calls[i].out == 1 && pipes[i + 1][0])
+			calls[i].out = pipes[i][1];
 	}
 }

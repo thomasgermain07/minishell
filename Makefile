@@ -6,7 +6,7 @@
 #    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 08:26:20 by thgermai          #+#    #+#              #
-#    Updated: 2020/06/22 11:13:41 by thgermai         ###   ########.fr        #
+#    Updated: 2020/06/24 15:13:23 by thgermai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,9 @@ OBJSDIR = .objs
 SRCS = main.c\
 		parse_call.c\
 		check_pipes.c\
-		clean_func.c\
-		exec_binary.c
+		utiles_func.c\
+		exec_binary.c\
+		parse_func.c
 OBJS = $(addprefix $(OBJSDIR)/, $(SRCS:.c=.o))
 DPDCS = $(OBJS:.o=.d)
 INCLUDES = -I includes/ -I libft/
