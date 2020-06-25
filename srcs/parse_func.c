@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/24 11:30:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 01:00:11 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/25 15:00:19 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,16 @@ static int		count_args(char *str)
 	i = -1;
 	in_quote = 0;
 	in_dquote = 0;
+	while (str[++i] == ' ')
+		;
 	while (str[++i])
 	{
 		if (str[i] == '\'' && i > 0 && str[i - 1] != '\\')
 			in_quote == 1 ? in_quote-- : in_quote++;
 		if (str[i] == '"' && i > 0 && str[i - 1] != '\\')
 			in_dquote == 1 ? in_dquote-- : in_dquote++;
-		if (str[i] == ' ' && !in_dquote && !in_quote)
+		if (str[i] == ' ' && str[i + 1] && str[i + 1]
+			!= ' ' && !in_dquote && !in_quote)
 			count++;
 	}
 	return (count);
@@ -57,7 +60,7 @@ static int		create_line(char *str, char **tab)
 		}
 		if ((str[i] == ' ' || !str[i + 1]) && !in_quote && !in_dquote)
 		{
-			!str[i + 1] ? i++: (void)i;
+			!str[i + 1] && str[i] != ' ' ? i++: (void)i;
 			return (ft_strlen((*tab = ft_substr(str, 0, i))));
 		}
 	}

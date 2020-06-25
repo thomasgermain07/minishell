@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 11:16:25 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/25 14:43:34 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ t_list			**tab_to_list(char **env)
 		ft_printf_e("Minishell: error: list creation failed\n");
 		exit(1);
 	}
+	*list = NULL;
 	while (env[++i])
 		ft_lstadd_back(list, ft_lstnew(env[i]));
 	return (list);

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 11:15:57 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/25 13:29:23 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,10 @@ static void		parse_input(char *str, t_list **env)
 		connect_pipes(calls, pipes);
 	i = -1;
 	while (calls[++i].str)
-		if ((pids[i] = exec_binary(&calls[i], pipes, get_n_pipes(str, 0))) == -1)
-			break ;
+		pids[i] = exec_binary(&calls[i], pipes, get_n_pipes(str, 0));
 	close_pipes(pipes, get_n_pipes(str, 0));
 	wait_pids(pids, get_n_pipes(str, 0) + 1, calls);
 	clean_calls(calls);
-//	exit(0);
 }
 
 void			prompt(char **env)
@@ -64,11 +62,7 @@ void			prompt(char **env)
 		ft_printf("\033[1;32mMINISHELL \033[0m 👉 ");
 		get_next_line(0, &args);
 		if (ft_strlen(args))
-		{
-		//	if (fork() == 0)
-				parse_input(args, list);
-		//	wait(NULL);
-		}
+			parse_input(args, list);
 		free(args);
 	}
 }
