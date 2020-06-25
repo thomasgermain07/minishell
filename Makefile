@@ -6,7 +6,7 @@
 #    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 08:26:20 by thgermai          #+#    #+#              #
-#    Updated: 2020/06/24 15:13:23 by thgermai         ###   ########.fr        #
+#    Updated: 2020/06/25 11:20:31 by thgermai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,3 +65,4 @@ git : fclean
 	@(git push)
 
 re : fclean all
+

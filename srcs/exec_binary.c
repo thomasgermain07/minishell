@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 11:13:04 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 00:56:11 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/25 11:13:32 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,14 @@ pid_t			exec_binary(t_call	*call, int pipes[][2], int size)
 	env_var = list_to_tab(call->env);
 	func = parse_func(call->str);
 	if (!(func[0] = get_path(call, func[0]))) // Serra appler dans le parse d'arg
-		exit(2);
+		return (-1);
 	if ((pid = fork()) == 0)
 	{
 		duplicate_fd(call);
 		close_pipes(pipes, size);
 		execve(func[0], func, env_var); // A remplacer par un parse de function
 		ft_printf_e("Minishell: execvp: %s\n", strerror(errno));
+		exit(1);
 	}
 	clean_array(func);
 	free(env_var);
