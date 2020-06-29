@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 21:49:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/23 22:14:42 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/26 17:51:28 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int			get_n_pipes(char *args, int option)
 		}
 	}
 	if (option == 1)
-		return (0);
+		return (-1);
 	return (n_pipes);
 }
 
@@ -44,7 +44,7 @@ void			check_pipes(char *str, t_call *calls)
 
 	last_i = 0;
 	i = 0;
-	while (get_n_pipes(str + last_i, 1))
+	while (get_n_pipes(str + last_i, 1) != -1)
 	{
 		calls[i].str = ft_substr(str + last_i, 0,
 			get_n_pipes(str + last_i, 1));

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 13:29:23 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/29 14:59:06 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,15 @@ void			prompt(char **env)
 	{
 		ft_printf("\033[1;32mMINISHELL \033[0m 👉 ");
 		get_next_line(0, &args);
+		args = parse_var(args, list);
+		if (!ft_strncmp(args, "exit", 5))
+			break ;
 		if (ft_strlen(args))
 			parse_input(args, list);
 		free(args);
 	}
+	ft_lstclear(list, &free);
+	system("leaks minishell");
 }
 
 int				main(int ac, char **av, char **env)

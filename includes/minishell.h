@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 00:24:15 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/29 14:22:52 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void				clean_array(char **array);
 char				*find_value(char *str, t_list **env);
 // parse_func.c
 char				**parse_func(char *str);
-
+// replace_var.c
+char				*parse_var(char *str, t_list **env);
 #endif
 
 /*
@@ -62,4 +63,5 @@ char				**parse_func(char *str);
 
 	- Parsing all env var has to be done before everything cause it
 		can be used for redirection for exemple
+	- for ' and " check if !n_quote for n_dquote++ etcpo
 */
