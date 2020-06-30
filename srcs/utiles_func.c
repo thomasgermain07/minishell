@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 15:07:06 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/30 21:47:21 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ char			**list_to_tab(t_list **lst)
 	i = -1;
 	if (!(tab = malloc(sizeof(char *) * (size + 1))))
 	{
-		ft_printf_e("Minishell: error: tab creation failed\n");
-		exit(1);
+		ft_printf_e("Minishell: error: malloc failed\n");
+		exit(EXIT_FAILURE);
 	}
 	current = *lst;
 	while (++i < size)
@@ -75,8 +75,8 @@ t_list			**tab_to_list(char **env)
 	i = -1;
 	if (!(list = malloc(sizeof(t_list *))))
 	{
-		ft_printf_e("Minishell: error: list creation failed\n");
-		exit(1);
+		ft_printf_e("Minishell: error: malloc failed\n");
+		exit(EXIT_FAILURE);
 	}
 	*list = NULL;
 	while (env[++i])
@@ -101,9 +101,35 @@ char			*find_value(char *str, t_list **env)
 	current = *env;
 	while (current)
 	{
-		if (!ft_strncmp(str, (char *)current->content, ft_strlen(str)))
-			return ((char *)current->content);
+		if (str[ft_strlen(str)] == '=')
+		{
+			if (!ft_strncmp(str, (char *)current->content, ft_strlen(str)))
+				return ((char *)current->content);
+		}
+		else
+		{
+			if (!ft_strncmp(str, (char *)current->content, ft_strlen(str)) &&
+				((char *)current->content)[ft_strlen(str)] == '=')
+				return ((char *)current->content);
+		}
 		current = current->next;
 	}
 	return (NULL);
+}
+
+int				known_func(char *str)
+{
+	if (!ft_strncmp(str, "echo", 4))
+		return (1);
+	else if (!ft_strncmp(str, "cd", 2))
+		return (1);
+	else if (!ft_strncmp(str, "pwd", 3))
+		return (1);
+	else if (!ft_strncmp(str, "export", 6))
+		return (1);
+	else if (!ft_strncmp(str, "unset", 5))
+		return (1);
+	else if (!ft_strncmp(str, "env", 3))
+		return (1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/25 15:12:10 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/29 15:12:41 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/30 21:42:11 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static char		*get_name_var(char *str)
 	i  = 1;
 	if (str[0] != '$')
 		return (NULL);
-	while (str[i] && str[i] != ' ' && str[i] != '|' && str[i] != ';' && str[i] !='\'' && str[i] != '"')
+	while (str[i] && str[i] != ' ' && str[i] != '|'
+		&& str[i] != ';' && str[i] !='\'' && str[i] != '"')
 		i++;
 	return (ft_substr(str, 1, i - 1));
 }

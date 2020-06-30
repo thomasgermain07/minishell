@@ -6,13 +6,13 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/29 14:59:06 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/30 15:53:16 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void		wait_pids(pid_t *pids, int size, t_call *calls)
+void			wait_pids(pid_t *pids, int size, t_call *calls)
 {
 	int			i;
 	int			status;
@@ -38,15 +38,19 @@ static void		parse_input(char *str, t_list **env)
 	while (calls[++i].str)
 		parse_call(&calls[i], env);
 	if (i > 1)
+	{
 		create_pipes(calls, pipes);
-	i = -1;
-	while (calls[++i].str)
-		connect_pipes(calls, pipes);
-	i = -1;
-	while (calls[++i].str)
-		pids[i] = exec_binary(&calls[i], pipes, get_n_pipes(str, 0));
-	close_pipes(pipes, get_n_pipes(str, 0));
-	wait_pids(pids, get_n_pipes(str, 0) + 1, calls);
+		i = -1;
+		while (calls[++i].str)
+			connect_pipes(calls, pipes);
+		i = -1;
+		while (calls[++i].str)
+			pids[i] = exec_binary(&calls[i], pipes, get_n_pipes(str, 0));
+		close_pipes(pipes, get_n_pipes(str, 0));
+		wait_pids(pids, get_n_pipes(str, 0) + 1, calls);
+	}
+	else
+		exec_alone(&calls[0]);
 	clean_calls(calls);
 }
 

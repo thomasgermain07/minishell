@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 11:13:04 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 15:09:02 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/30 21:00:56 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,29 @@ static void		duplicate_fd(t_call *call)
 	}
 }
 
-pid_t			exec_binary(t_call	*call, int pipes[][2], int size)
+static int		execute(t_call *call, char **func, char **env)
+{
+	if (!ft_strncmp(func[0], "echo", 4))
+		return (ft_echo(func));
+	else if (!ft_strncmp(func[0], "cd", 2))
+		return (ft_cd(func));
+	else if (!ft_strncmp(func[0], "pwd", 3))
+		return (ft_pwd());
+	else if (!ft_strncmp(func[0], "export", 6))
+		return (ft_export(call, func));
+	else if (!ft_strncmp(func[0], "unset", 5))
+		return (ft_unset(call, func));
+	else if (!ft_strncmp(func[0], "env", 3))
+		return (ft_env(call));
+	else
+	{
+		execve(func[0], func, env);
+		ft_printf_e("Minishell: execve: %s\n", strerror(errno));
+		return (EXIT_FAILURE);
+	}
+}
+
+pid_t			exec_binary(t_call *call, int pipes[][2], int size)
 {
 	char		**func;
 	int			i;
@@ -96,17 +118,45 @@ pid_t			exec_binary(t_call	*call, int pipes[][2], int size)
 	i = -1;
 	env_var = list_to_tab(call->env);
 	func = parse_func(call->str);
-	if (!(func[0] = get_path(call, func[0]))) // Serra appler dans le parse d'arg
-		return (-1);
+	if (!known_func(func[0]))
+		if (!(func[0] = get_path(call, func[0])))
+			return (-1);
 	if ((pid = fork()) == 0)
 	{
 		duplicate_fd(call);
 		close_pipes(pipes, size);
-		execve(func[0], func, env_var); // A remplacer par un parse de function
-		ft_printf_e("Minishell: execvp: %s\n", strerror(errno));
-		exit(1);
+		exit(execute(call, func, env_var));
 	}
 	clean_array(func);
 	free(env_var);
 	return (pid);
+}
+
+void			exec_alone(t_call *call)
+{
+	char		**func;
+	char		**var_env;
+	pid_t		pid;
+
+	var_env = list_to_tab(call->env);
+	func = parse_func(call->str);
+	if (known_func(func[0]))
+	{
+		call->ret = execute(call, func, var_env);
+		clean_array(func);
+		free(var_env);
+		return ;
+	}
+	func[0] = get_path(call, func[0]);
+	if ((pid = fork()) == 0)
+	{
+		ft_printf_e("Here i am mf\n");
+		duplicate_fd(call);
+		execve(func[0], func, var_env);
+		ft_printf_e("Minishell: execve: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	clean_array(func);
+	free(var_env);
+	wait_pids(&pid, 1, call);
 }

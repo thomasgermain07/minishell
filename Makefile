@@ -6,7 +6,7 @@
 #    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 08:26:20 by thgermai          #+#    #+#              #
-#    Updated: 2020/06/29 13:38:48 by thgermai         ###   ########.fr        #
+#    Updated: 2020/06/30 17:38:07 by thgermai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,9 @@ SRCS = main.c\
 		utiles_func.c\
 		exec_binary.c\
 		parse_func.c\
-		replace_var.c
+		replace_var.c\
+		builtin.c\
+		builtin_env.c
 OBJS = $(addprefix $(OBJSDIR)/, $(SRCS:.c=.o))
 DPDCS = $(OBJS:.o=.d)
 INCLUDES = -I includes/ -I libft/
