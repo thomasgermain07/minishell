@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/30 21:47:21 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/01 10:43:53 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ char			*find_value(char *str, t_list **env)
 	current = *env;
 	while (current)
 	{
-		if (str[ft_strlen(str)] == '=')
+		if (str[ft_strlen(str) - 1] == '=')
 		{
 			if (!ft_strncmp(str, (char *)current->content, ft_strlen(str)))
 				return ((char *)current->content);

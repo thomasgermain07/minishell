@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/30 17:24:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/30 21:39:17 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/01 11:02:33 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,28 +77,24 @@ static int		delete_element(t_call *call, char *key)
 int				ft_unset(t_call *call, char **func)
 {
 	int			i;
-	int			ret;
 	char		*key;
 
-	ft_printf_e("My own unset\n");
 	i = 0;
-	ret = 1;
 	while (func[++i])
 	{
 		key = ft_strjoin(func[i], "=");
 		printf("%s\n", key);
 		if (find_value(key, call->env))
-			ret = delete_element(call, key);
+			delete_element(call, key);
 		free(key);
 	}
-	return (ret);
+	return (EXIT_SUCCESS);
 }
 
 int				ft_env(t_call *call)
 {
 	t_list		*current;
 
-	ft_printf_e("My own env\n");
 	if (call->env)
 	{
 		current = *call->env;
@@ -116,22 +112,19 @@ int				ft_export(t_call *call, char **func)
 {
 	int			i;
 	char		*key;
-	int			ret;
 
 	i = 0;
-	ret = 0;
-	ft_printf_e("My own export\n");
 	while (func[++i])
 	{
 		if (func[i][0] != '=' && ft_strchr(func[i], '='))
 		{
 			key = get_key(func[i]);
 			if (find_value(key, call->env))
-				ret = add_env(call, key, ft_strchr(func[i], '=') + 1, 1);
+				add_env(call, key, ft_strchr(func[i], '=') + 1, 1);
 			else
-				ret = add_env(call, key, ft_strchr(func[i], '=') + 1, 0);
+				add_env(call, key, ft_strchr(func[i], '=') + 1, 0);
 			free(key);
 		}
 	}
-	return (ret);
+	return (EXIT_SUCCESS);
 }
