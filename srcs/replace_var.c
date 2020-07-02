@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/25 15:12:10 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/30 21:42:11 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/02 15:18:59 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char		*get_name_var(char *str)
 	return (ft_substr(str, 1, i - 1));
 }
 
-static int		get_n_var(char *str, int option)
+static int		get_n_var(char *str)
 {
 	int			i;
 	int			in_quote;
@@ -36,17 +36,9 @@ static int		get_n_var(char *str, int option)
 	i = -1;
 	while (str[++i])
 	{
-		if (str[i] == '\'' && i > 0 && str[i - 1] != '\\')
-			in_quote == 1 ? in_quote-- : in_quote++;
-		if (str[i] == '$' && !in_quote)
-		{
-			if (option == 1)
-				return (i);
+		if (str[i] == '$' && !is_valide(str, i))
 			count++;
-		}
 	}
-	if (option == 1)
-		return (-1);
 	return (count);
 }
 
@@ -75,18 +67,19 @@ static char		*replace_var(char *str, int index, t_list **env)
 char			*parse_var(char *str, t_list **env)
 {
 	int			i;
-	int			in_quote;
+	int			n;
 
-	in_quote = 0;
-	if (!get_n_var(str, 0))
+	n = get_n_var(str);
+	if (!n)
 		return (str);
 	i = 0;
-	while (get_n_var(str + i, 0) > 0 && str[i])
+	while (n > 0 && str[i])
 	{
-		if (str[i] == '\'' && i > 0 && str[i - 1] != '\\')
-			in_quote == 1 ? in_quote-- : in_quote++;
-		if (str[i] == '$' && !in_quote)
+		if (str[i] == '$' && !is_valide(str, i))
+		{
 			str = replace_var(str, i, env);
+			n--;
+		}
 		i++;
 	}
 	return (str);

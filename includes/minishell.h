@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/30 20:52:01 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/02 14:42:53 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ typedef	struct		s_call
 	int				ret;
 }					t_call;
 
+int					is_valide(char *str, int index);
+char				*replace_quotes(char *str);
+
 // exec_binary.c
 pid_t				exec_binary(t_call	*call, int pipes[][2], int size);
 void				exec_alone(t_call *call);
@@ -55,7 +58,8 @@ void				clean_array(char **array);
 char				*find_value(char *str, t_list **env);
 int					known_func(char *str);
 // parse_func.c
-char				**parse_func(char *str);
+// char				**parse_func(char *str);
+char				**parse_func(char *str, t_list **env);
 // replace_var.c
 char				*parse_var(char *str, t_list **env);
 // builtin.c

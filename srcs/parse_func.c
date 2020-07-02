@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/24 11:30:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/25 15:00:19 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/02 15:18:37 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,8 @@ static int		count_args(char *str)
 		;
 	while (str[++i])
 	{
-		if (str[i] == '\'' && i > 0 && str[i - 1] != '\\')
-			in_quote == 1 ? in_quote-- : in_quote++;
-		if (str[i] == '"' && i > 0 && str[i - 1] != '\\')
-			in_dquote == 1 ? in_dquote-- : in_dquote++;
 		if (str[i] == ' ' && str[i + 1] && str[i + 1]
-			!= ' ' && !in_dquote && !in_quote)
+			!= ' ' && !is_valide(str, i))
 			count++;
 	}
 	return (count);
@@ -53,9 +49,9 @@ static int		create_line(char *str, char **tab)
 		{
 			if (i > 0 && str[i - 1] == '\\')
 				;
-			else if (str[i] == '"')
+			else if (str[i] == '"' && !in_quote)
 				in_dquote == 1 ? in_dquote-- : in_dquote++;
-			else
+			else if (str[i] == '\'' && !in_dquote)
 				in_quote == 1 ? in_quote-- : in_quote++;
 		}
 		if ((str[i] == ' ' || !str[i + 1]) && !in_quote && !in_dquote)
@@ -67,7 +63,7 @@ static int		create_line(char *str, char **tab)
 	return (i);
 }
 
-char			**parse_func(char *str)
+char			**parse_func(char *str, t_list **env)
 {
 	int				size;
 	int				i;
@@ -84,6 +80,8 @@ char			**parse_func(char *str)
 		while (*str == ' ')
 			str++;
 		str = str + create_line(str, &tab[i]);
+		tab[i] = parse_var(tab[i], env);
+		tab[i] = replace_quotes(tab[i]);
 	}
 	tab[i] = NULL;
 	return (tab);

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/22 11:13:04 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/30 21:00:56 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/02 18:36:44 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ pid_t			exec_binary(t_call *call, int pipes[][2], int size)
 
 	i = -1;
 	env_var = list_to_tab(call->env);
-	func = parse_func(call->str);
+	func = parse_func(call->str, call->env);
 	if (!known_func(func[0]))
 		if (!(func[0] = get_path(call, func[0])))
 			return (-1);
@@ -139,18 +139,19 @@ void			exec_alone(t_call *call)
 	pid_t		pid;
 
 	var_env = list_to_tab(call->env);
-	func = parse_func(call->str);
+	func = parse_func(call->str, call->env);
 	if (known_func(func[0]))
 	{
+		duplicate_fd(call);
 		call->ret = execute(call, func, var_env);
 		clean_array(func);
 		free(var_env);
 		return ;
 	}
-	func[0] = get_path(call, func[0]);
+	if (!(func[0] = get_path(call, func[0])))
+		return ;
 	if ((pid = fork()) == 0)
 	{
-		ft_printf_e("Here i am mf\n");
 		duplicate_fd(call);
 		execve(func[0], func, var_env);
 		ft_printf_e("Minishell: execve: %s\n", strerror(errno));
