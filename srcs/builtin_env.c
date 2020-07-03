@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/30 17:24:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/03 10:36:10 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/03 10:41:36 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int				ft_env(t_call *call)
 		current = *call->env;
 		while (current)
 		{
-			if (i > -1)
+			if (i > 0)
 			{
 				write(1, (char *)current->content,
 					ft_strlen((char*)current->content));
