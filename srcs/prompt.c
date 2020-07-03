@@ -6,11 +6,42 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/02 23:06:11 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/03 10:38:41 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void			save_ret(t_list **env, int value)
+{
+	t_list		*current;
+
+	current = *env;
+	if (ft_strncmp("?=", (char *)current->content, 2))
+		ft_lstadd_front(env, ft_lstnew(ft_strjoin_f2("?=", ft_itoa(value))));
+	else
+	{
+		free(current->content);
+		current->content = ft_strjoin_f2("?=", ft_itoa(value));
+	}
+}
+
+void			wait_pids(pid_t *pids, int size, t_call *calls)
+{
+	int			i;
+	int			status;
+
+	i = -1;
+	while (++i < size && pids[i] != -1)
+	{
+		waitpid(pids[i], &status, 0);
+		if (WIFEXITED(status))
+		{
+			calls[i].ret = WEXITSTATUS(status);
+			save_ret(calls->env, calls[i].ret);
+		}
+	}
+}
 
 static void		exec_input(char *str, t_list **env)
 {
@@ -46,20 +77,6 @@ static void		exec_input(char *str, t_list **env)
 	free(g_pids);
 }
 
-void			wait_pids(pid_t *pids, int size, t_call *calls)
-{
-	int			i;
-	int			status;
-
-	i = -1;
-	while (++i < size && pids[i] != -1)
-	{
-		waitpid(pids[i], &status, 0);
-		if (WIFEXITED(status))
-			calls[i].ret = WEXITSTATUS(status);
-	}
-}
-
 void			print(void)
 {
 	ft_printf("\033[1;32mMINISHELL \033[0m 👉 ");
@@ -73,6 +90,7 @@ void			prompt(char **env)
 	int			i;
 
 	list = tab_to_list(env);
+	save_ret(list, 0);
 	args = NULL;
 	split_args = NULL;
 	i = -1;

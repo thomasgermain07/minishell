@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:48:42 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/02 23:11:59 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/03 10:36:47 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void			exec_knonw(t_call *call, char **func, char **var_env)
 	fds[1] = dup(1);
 	duplicate_fd(call);
 	call->ret = execute(call, func, var_env);
+	save_ret(call->env, call->ret);
 	clean_array(func);
 	free(var_env);
 	dup2(fds[0], 0);

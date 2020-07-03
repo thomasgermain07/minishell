@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/02 23:05:51 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/03 10:36:25 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,76 +41,78 @@ pid_t				*g_pids;  //ALICE
 
 ///////////////////////////////////////////////////////////////
 
-// prompt.c +
+// prompt.c
 void				wait_pids(pid_t *pids, int size, t_call *calls);
 void				prompt(char **env);
 void				print(void);
-// parse_semicolons.c +
+void				save_ret(t_list **env, int value);
+
+// parse_semicolons.c
 char				**parse_semicolon(char *str);
 
-// Parse_pipes.c +
+// Parse_pipes.c
 void				parse_pipes(char *str, t_call *calls);
 int					get_n_pipes(char *args, int option);
 
-// Parse_call.c +
+// Parse_call.c
 void				parse_call(t_call *call, t_list **env);
 
-// Parse_func.c +
+// Parse_func.c
 char				**parse_func(char *str, t_list **env);
 
-// Parse_var.c +
+// Parse_var.c
 char				*parse_var(char *str, t_list **env);
 
-// Parse_quotes.c +
+// Parse_quotes.c
 char				*parse_quotes(char *str);
 
-// Parse_exec.c +
+// Parse_exec.c
 char				*parse_exec(t_call *call, char *bin);
 
-// Execute.c +
+// Execute.c
 pid_t				exec1(t_call *call, int pipes[][2], int size);
 void				exec2(t_call *call);
 
-// Execute_utiles.c +
+// Execute_utiles.c
 void				duplicate_fd(t_call *call);
 int					execute(t_call *call, char **func, char **env);
 void				exec_knonw(t_call *call, char **func, char **var_env);
 
-// builtin.c +
+// builtin.c
 int	 				ft_echo(char **func);
 int 				ft_cd(char **func);
 int					ft_pwd(void);
 
-// builtin_env.c +
+// builtin_env.c
 int					ft_env(t_call *call);
 int					ft_unset(t_call *call, char **func);
 int					ft_export(t_call *call, char **func);
 
-// builtin_env_utiles.c +
+// builtin_env_utiles.c
 char				*get_key(char *str);
 int					add_env(t_call *call, char *key, char *value, int option);
 int					delete_element(t_call *call, char *key);
 
-// handle_pipes.c +
+// handle_pipes.c
 void				create_pipes(t_call *calls, int pipes[][2]);
 void				connect_pipes(t_call *calls, int pipes[][2]);
 
-// utiles_convert.c +
+// utiles_convert.c
 t_list				**tab_to_list(char **env);
 char				**list_to_tab(t_list **lst);
 
-// utiles.c +
+// utiles.c
 char				*get_cwd(void);
 int					is_valide(char *str, int index, int option);
 char				*find_value(char *str, t_list **env);
 int					known_func(char *str);
 
-// clean.c +
+// clean.c
 void				close_pipes(int	pipes[][2], int size);
 void				clean_calls(t_call *calls);
 void				clean_array(char **array);
 
-// signal.c +
+// signal.c
 void				control_c(int sig);
 int					control_d(void);
 void				control_quit(int sig);
