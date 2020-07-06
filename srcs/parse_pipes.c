@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 21:49:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/02 23:07:45 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/06 11:24:36 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int				get_n_pipes(char *args, int option)
 	n_pipes = 0;
 	while (args[++i])
 	{
-		if (args[i] == '|' && !is_valide(args, i, 0))
+		if (args[i] == '|' && !is_valide(args, i, 1))
 		{
 			if (option == 1)
 				return (i);

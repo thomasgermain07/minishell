@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/02 22:43:34 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/03 15:50:46 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char			*get_cwd(void)
 {
-	static char	buffer[512];
+	char		buffer[512];
 	char		*cwd;
 
 	ft_bzero(buffer, 512);

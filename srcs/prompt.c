@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/03 10:38:41 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/06 11:29:03 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,9 @@ void			prompt(char **env)
 			if (split_args)
 				while (split_args[++i])
 					exec_input(split_args[i], list);
+			clean_array(split_args);
 		}
 		free(args);
-		clean_array(split_args);
 	}
 	ft_lstclear(list, &free);
 	system("leaks minishell");

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/24 11:30:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/02 23:08:52 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/06 11:23:44 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int		get_n_args(char *str)
 	while (str[++i])
 	{
 		if (str[i] == ' ' && str[i + 1] && str[i + 1]
-			!= ' ' && !is_valide(str, i, 0))
+			!= ' ' && !is_valide(str, i, 1))
 			count++;
 	}
 	return (count);
@@ -40,6 +40,8 @@ static int		create_line(char *str, char **tab)
 	int			in_quote;
 	int			in_dquote;
 
+	if (!str)
+		printf("str here is : %s\n", str);
 	in_quote = 0;
 	in_dquote = 0;
 	i = -1;
