@@ -29,6 +29,7 @@ SRCS = main.c\
 		parse_semicolons.c\
 		parse_var.c\
 		prompt.c\
+		prompt_utiles.c\
 		signal.c\
 		utiles.c\
 		utiles_convert.c

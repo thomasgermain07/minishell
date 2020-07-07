@@ -20,14 +20,16 @@ void			control_c(int sig)
 	if (!g_pids)
 	{
 		write(1, "\b\b  \b\b\n", 7);
-		print(); // valeur de retour :1
+		exit_status = 1;
+		print();
 	}
 	else
 	{
 		i = -1;
 		while(++i)
-			kill(g_pids[i], sig); // ajouter 128 et num sig -> 130
+			kill(g_pids[i], sig);
 		write(1, "\n", 1);
+		exit_status = 130;
 	}
 }
 
@@ -40,13 +42,15 @@ int				control_d(void)
 	{
     	write(1, "\b   \b\b", 6);
         ft_printf("exit\n");
-        return(0); // valeur de retour 0
+		exit_status = 0;
+        return(0);
 	}
 	else
 	{
 		while(++i)
 			kill(g_pids[i], 2);
 		ft_printf("exit\n");
+		exit_status = 0;
 		return (0);
 	}
 	return (1);
@@ -61,8 +65,12 @@ void			control_quit(int sig)
 	{
 		ft_printf("Quit: %d\n", sig);
 		while(++i)
-			kill(g_pids[i], 2); // valeur de retoru = 128 + sig -> !131
+			kill(g_pids[i], 2);
+		exit_status = 131;
 	}
 	else
-		write(1, "\b\b  \b\b", 6); // valeur de retour: 127
+	{
+		write(1, "\b\b  \b\b", 6);
+		exit_status = 127;
+	}
 }

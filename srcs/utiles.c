@@ -46,19 +46,21 @@ char			*find_value(char *str, t_list **env)
 }
 
 int				known_func(char *str)
-{
-	if (!ft_strncmp(str, "echo", 4))
+{//ATTENTION J'CHANGE TOUS LES NOMBRES
+	if (!ft_strncmp(str, "echo", 5))
 		return (1);
-	else if (!ft_strncmp(str, "cd", 2))
+	else if (!ft_strncmp(str, "cd", 3))
 		return (1);
-	else if (!ft_strncmp(str, "pwd", 3))
+	else if (!ft_strncmp(str, "pwd", 4))
 		return (1);
-	else if (!ft_strncmp(str, "export", 6))
+	else if (!ft_strncmp(str, "export", 7))
 		return (1);
-	else if (!ft_strncmp(str, "unset", 5))
+	else if (!ft_strncmp(str, "unset", 6))
 		return (1);
-	else if (!ft_strncmp(str, "env", 3))
+	else if (!ft_strncmp(str, "env", 4))
 		return (1);
+	else if (!ft_strncmp(str, "exit", 5)) // ici
+		return (1); //ici
 	return (0);
 }
 

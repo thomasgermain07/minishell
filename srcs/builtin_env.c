@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/30 17:24:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/03 10:41:36 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/07 11:02:27 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,16 @@ int				ft_unset(t_call *call, char **func)
 int				ft_env(t_call *call)
 {
 	t_list		*current;
-	int			i;
 
-	i = 0;
 	if (call->env)
 	{
 		current = *call->env;
 		while (current)
 		{
-			if (i > 0)
-			{
-				write(1, (char *)current->content,
-					ft_strlen((char*)current->content));
-				write(1, "\n", 1);
-			}
+			write(1, (char *)current->content,
+				ft_strlen((char*)current->content));
+			write(1, "\n", 1);
 			current = current->next;
-			i++;
 		}
 	}
 	return (EXIT_SUCCESS);
@@ -60,6 +54,11 @@ int				ft_export(t_call *call, char **func)
 	i = 0;
 	while (func[++i])
 	{
+		if (func[i][0] == '=') //CORRECTION
+		{						//CORRECTION
+			ft_printf_e("minishell: export: '%s': not a valid identifier\n", func[i]); //CORRECTION
+			return (EXIT_FAILURE); //CORRECTION
+		}
 		if (func[i][0] != '=' && ft_strchr(func[i], '='))
 		{
 			key = get_key(func[i]);

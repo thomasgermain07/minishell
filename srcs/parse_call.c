@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 16:15:55 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/02 23:15:44 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/07 11:48:16 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static int		check_output(t_call *call, int i)
 			{
 				if ((call->out = get_fd(&call->str[i + 2], 3)) == -1)
 					exit(7);
+				i++;
 			}
 			else if ((call->out = get_fd(&call->str[i + 1], 2)) == -1)
 				exit(6);

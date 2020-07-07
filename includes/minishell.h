@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/06 11:31:25 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/07 11:14:03 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,16 @@ typedef	struct		s_call
 
 // variables globales
 pid_t				*g_pids;  //ALICE
+int					exit_status;
 
 ///////////////////////////////////////////////////////////////
 
 // Prompt.c
 void				wait_pids(pid_t *pids, int size, t_call *calls);
 void				prompt(char **env);
+
+//prompt_utiles.c // ici
 void				print(void);
-void				save_ret(t_list **env, int value);
 
 // Parse_semicolons.c
 char				**parse_semicolon(char *str);
@@ -70,18 +72,20 @@ char				*parse_quotes(char *str);
 char				*parse_exec(t_call *call, char *bin);
 
 // Execute.c
-pid_t				exec1(t_call *call, int pipes[][2], int size);
-void				exec2(t_call *call);
+pid_t				exec1(t_call *call, int pipes[][2], int size,
+						int *exit_info); //ici
+void				exec2(t_call *call, int *exit_info); //ici
 
 // Execute_utiles.c
 void				duplicate_fd(t_call *call);
-int					execute(t_call *call, char **func, char **env);
-void				exec_knonw(t_call *call, char **func, char **var_env);
+int					execute(t_call *call, char **func, char **env, int *exit_info); //ici
+void				exec_knonw(t_call *call, char **func, char **var_env, int *exit_info); //ici
 
 // Builtin.c
 int	 				ft_echo(char **func);
 int 				ft_cd(char **func);
 int					ft_pwd(void);
+int					ft_builtin_exit(int *exit_info); // ici
 
 // Builtin_env.c
 int					ft_env(t_call *call);
@@ -125,4 +129,11 @@ void				control_quit(int sig);
 	- Parsing all env var has to be done before everything cause it
 		can be used for redirection for exemple
 	- for ' and " check if !n_quote for n_dquote++ etcpo
+*/
+
+/*
+	PROBLEMES:
+
+	echo espace quand $var pas bon
+	message erreur en double quand fonction pas connu
 */

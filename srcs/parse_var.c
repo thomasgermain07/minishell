@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/25 15:12:10 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/06 11:23:22 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/07 11:22:10 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int		get_n_var(char *str)
 	return (count);
 }
 
-static char		*replace_var(char *str, int index, t_list **env)
+static char		*replace_var(char *str, int index, t_list **env, int option)
 {
 	char		*temp;
 	char		*var;
@@ -50,10 +50,15 @@ static char		*replace_var(char *str, int index, t_list **env)
 	int			i;
 
 	temp = ft_substr(str, 0, index);
-	var_name = get_name_var(str + index);
-	var = find_value(var_name, env);
-	if (var)
-		temp = ft_strjoin_f1(temp, var + ft_strlen(var_name) + 1);
+	if (!option)
+	{
+		var_name = get_name_var(str + index);
+		var = find_value(var_name, env);
+		if (var)
+			temp = ft_strjoin_f1(temp, var + ft_strlen(var_name) + 1);
+	}
+	if (option)
+		temp = ft_strjoin_f12(temp, ft_itoa(exit_status));
 	i = index;
 	while (str[i] && str[i] != '"' && str[i] != '\'' &&
 		str[i] != ' ' && str[i] != '|' && str[i] != ';')
@@ -77,7 +82,12 @@ char			*parse_var(char *str, t_list **env)
 	{
 		if (str[i] == '$' && !is_valide(str, i, 0))
 		{
-			str = replace_var(str, i, env);
+			if (str[i - 1] && str[i - 1] == '\\')
+				;
+			else if (str[i + 1] && str[i + i] == '?')
+				str = replace_var(str, i, env, 1);
+			else
+				str = replace_var(str, i, env, 0);
 			n--;
 		}
 		i++;

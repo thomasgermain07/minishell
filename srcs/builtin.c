@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/29 21:54:49 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/02 22:24:31 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/07 11:12:59 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int				ft_cd(char **func)
 	i = 0;
 	if (func[1] && chdir(func[1]) == -1)
 	{
-		ft_printf_e("Minishell: error: %s\n", strerror(errno));
+		ft_printf_e("Minishell: cd: %s: %s\n", func[1], strerror(errno)); // CORRECTION
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -66,4 +66,16 @@ int				ft_pwd(void)
 	}
 	ft_printf("%s\n", current);
 	return (EXIT_SUCCESS);
+}
+
+int				ft_builtin_exit(int *exit_info) // ICI
+{
+	int i;
+
+	i = -1;
+	if (g_pids)
+		while (g_pids[++i])
+			kill(g_pids[i], 2);
+	*exit_info = 1;
+	return (EXIT_SUCCESS); // success?
 }

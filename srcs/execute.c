@@ -6,13 +6,14 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:47:56 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/03 09:51:49 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/07 10:31:14 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-pid_t			exec1(t_call *call, int pipes[][2], int size)
+//ajout de la variable exit_info
+pid_t			exec1(t_call *call, int pipes[][2], int size, int *exit_info) //ici
 {
 	char		**func;
 	int			i;
@@ -29,14 +30,16 @@ pid_t			exec1(t_call *call, int pipes[][2], int size)
 	{
 		duplicate_fd(call);
 		close_pipes(pipes, size);
-		exit(execute(call, func, env_var));
+		exit(execute(call, func, env_var, exit_info)); //ici
 	}
 	clean_array(func);
 	free(env_var);
+	if (*exit_info == 1) // ici
+		return (-1); // ici
 	return (pid);
 }
 
-void			exec2(t_call *call)
+void			exec2(t_call *call, int *exit_info) //ici
 {
 	char		**func;
 	char		**var_env;
@@ -46,7 +49,7 @@ void			exec2(t_call *call)
 	func = parse_func(call->str, call->env);
 	if (known_func(func[0]))
 	{
-		exec_knonw(call, func, var_env);
+		exec_knonw(call, func, var_env, exit_info); //ici
 		return ;
 	}
 	func[0] = parse_exec(call, func[0]);
@@ -59,5 +62,7 @@ void			exec2(t_call *call)
 	}
 	clean_array(func);
 	free(var_env);
+	if (*exit_info) //ici
+		return ; //ici
 	wait_pids(&pid, 1, call);
 }
