@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/25 15:12:10 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/08 11:14:31 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/08 11:41:03 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char		*get_name_var(char *str)
 	if (str[0] != '$')
 		return (NULL);
 	while (str[i] && str[i] != ' ' && str[i] != '|'
-		&& str[i] != ';' && str[i] != '\'' && str[i] != '"')
+		&& str[i] != ';' && str[i] != '\'' && str[i] != '"' && str[i] != '=')
 		i++;
 	return (ft_substr(str, 1, i - 1));
 }
@@ -56,17 +56,16 @@ static char		*replace_var(char *str, int index, t_list **env, int option)
 		var = find_value(var_name, env);
 		if (var)
 			temp = ft_strjoin_f1(temp, var + ft_strlen(var_name) + 1);
+		free(var_name);
 	}
-	printf("exit status = %d\n", exit_status);
 	if (option)
 		temp = ft_strjoin_f12(temp, ft_itoa(exit_status));
 	i = index;
 	while (str[i] && str[i] != '"' && str[i] != '\'' &&
-		str[i] != ' ' && str[i] != '|' && str[i] != ';')
+		str[i] != ' ' && str[i] != '|' && str[i] != ';' && str[i] != '=')
 		i++;
 	temp = ft_strjoin_f1(temp, str + i);
 	free(str);
-	free(var_name);
 	return (temp);
 }
 
@@ -85,7 +84,7 @@ char			*parse_var(char *str, t_list **env)
 		{
 			if (i > 0 && str[i - 1] == '\\')
 				;
-			else if (str[i + 1] && str[i + i] == '?') // marche pas encore
+			else if (str[i + 1] && str[i + 1] == '?') // marche pas encore
 				str = replace_var(str, i, env, 1);
 			else
 				str = replace_var(str, i, env, 0);
