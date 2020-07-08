@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/07 11:16:33 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/08 10:37:06 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void			wait_pids(pid_t *pids, int size, t_call *calls)
 	}
 }
 
-//Nouvelle fonction
 static void		manage_pipes(t_call *calls, int pipes[][2], char *str, int *exit_info)
 {
 	int i;

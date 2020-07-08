@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/25 15:12:10 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/07 11:22:10 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/08 11:14:31 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static char		*replace_var(char *str, int index, t_list **env, int option)
 		if (var)
 			temp = ft_strjoin_f1(temp, var + ft_strlen(var_name) + 1);
 	}
+	printf("exit status = %d\n", exit_status);
 	if (option)
 		temp = ft_strjoin_f12(temp, ft_itoa(exit_status));
 	i = index;
@@ -82,9 +83,9 @@ char			*parse_var(char *str, t_list **env)
 	{
 		if (str[i] == '$' && !is_valide(str, i, 0))
 		{
-			if (str[i - 1] && str[i - 1] == '\\')
+			if (i > 0 && str[i - 1] == '\\')
 				;
-			else if (str[i + 1] && str[i + i] == '?')
+			else if (str[i + 1] && str[i + i] == '?') // marche pas encore
 				str = replace_var(str, i, env, 1);
 			else
 				str = replace_var(str, i, env, 0);
