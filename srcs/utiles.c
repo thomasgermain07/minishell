@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/03 15:50:46 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/08 15:14:23 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char			*find_value(char *str, t_list **env)
 }
 
 int				known_func(char *str)
-{//ATTENTION J'CHANGE TOUS LES NOMBRES
+{	// ATTENTION J'CHANGE TOUS LES NOMBRES
 	if (!ft_strncmp(str, "echo", 5))
 		return (1);
 	else if (!ft_strncmp(str, "cd", 3))
@@ -60,7 +60,7 @@ int				known_func(char *str)
 	else if (!ft_strncmp(str, "env", 4))
 		return (1);
 	else if (!ft_strncmp(str, "exit", 5)) // ici
-		return (1); //ici
+		return (1); // ici
 	return (0);
 }
 

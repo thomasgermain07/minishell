@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/25 15:12:10 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/08 11:41:03 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/08 11:44:05 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char			*parse_var(char *str, t_list **env)
 		{
 			if (i > 0 && str[i - 1] == '\\')
 				;
-			else if (str[i + 1] && str[i + 1] == '?') // marche pas encore
+			else if (str[i + 1] && str[i + 1] == '?')
 				str = replace_var(str, i, env, 1);
 			else
 				str = replace_var(str, i, env, 0);
