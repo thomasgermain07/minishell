@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/09 13:47:34 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/09 17:06:54 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,5 @@ void			prompt(char **env)
 		free(args);
 	}
 	ft_lstclear(list, &free);
-	//system("leaks minishell");
+	system("leaks minishell");
 }

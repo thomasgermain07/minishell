@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utiles.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:48:42 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/08 16:03:57 by atetu            ###   ########.fr       */
+/*   Updated: 2020/07/09 18:42:26 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ int				execute(t_call *call, char **func, char **env, int *exit_info)
 	else if (!ft_strncmp(func[0], "unset", 6))
 		return (ft_unset(call, func));
 	else if (!ft_strncmp(func[0], "env", 400))
-		return (ft_env(call, 0));         //ici
+		return (ft_env(call, func));         //ici
 	else if (!ft_strncmp(func[0], "exit", 5))
-		return (ft_builtin_exit(exit_info)); 
+		return (ft_builtin_exit(exit_info));
 	else
 	{
 		execve(func[0], func, env);

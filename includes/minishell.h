@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/09 14:17:58 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/09 18:42:18 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 // temporary lib
 # include <stdio.h>
+
 # define REPLACE_CHAR "\\\"'$"
 
 typedef	struct		s_call
@@ -89,7 +90,7 @@ int					ft_pwd(void);
 int					ft_builtin_exit(int *exit_info);
 
 // Builtin_env.c
-int					ft_env(t_call *call, int option);   //ici
+int					ft_env(t_call *call, char **func);
 int					ft_unset(t_call *call, char **func);
 int					ft_export(t_call *call, char **func);
 
@@ -97,6 +98,7 @@ int					ft_export(t_call *call, char **func);
 char				*get_key(char *str);
 int					add_env(t_call *call, char *key, char *value, int option);
 int					delete_element(t_call *call, char *key);
+t_list				**sort_var_env(t_list **env);
 
 // Handle_pipes.c
 void				create_pipes(t_call *calls, int pipes[][2]);
