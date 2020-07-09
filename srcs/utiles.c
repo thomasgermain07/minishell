@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 23:43:21 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/03 15:50:46 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/09 14:01:40 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int				known_func(char *str)
 		return (1); //ici
 	return (0);
 }
-
+// option 0 out of squote | option 1 out of all quotes
 int				is_valide(char *str, int index, int option)
 {
 	int			i;

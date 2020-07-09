@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_func.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/24 11:30:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/08 17:46:50 by atetu            ###   ########.fr       */
+/*   Updated: 2020/07/09 14:50:36 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int		check_closed(char *str)
 	{
 		if (str[i] == '\'' || str[i] == '"')
 		{
-			if (i > 0 && str[i - 1] == '\\')
+			if (i > 0 && str[i - 1] == '\\' && !in_quote)
 				;
 			else if (str[i] == '\'' && !in_dquote)
 				in_quote == 1 ? in_quote-- : in_quote++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/08 14:42:23 by atetu            ###   ########.fr       */
+/*   Updated: 2020/07/09 14:17:58 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 // temporary lib
 # include <stdio.h>
+# define REPLACE_CHAR "\\\"'$"
 
 typedef	struct		s_call
 {
@@ -73,19 +74,19 @@ char				*parse_exec(t_call *call, char *bin);
 
 // Execute.c
 pid_t				exec1(t_call *call, int pipes[][2], int size,
-						int *exit_info); 
-void				exec2(t_call *call, int *exit_info); 
+						int *exit_info);
+void				exec2(t_call *call, int *exit_info);
 
 // Execute_utiles.c
 void				duplicate_fd(t_call *call);
-int					execute(t_call *call, char **func, char **env, int *exit_info); 
-void				exec_knonw(t_call *call, char **func, char **var_env, int *exit_info); 
+int					execute(t_call *call, char **func, char **env, int *exit_info);
+void				exec_knonw(t_call *call, char **func, char **var_env, int *exit_info);
 
 // Builtin.c
 int	 				ft_echo(char **func);
 int 				ft_cd(char **func);
 int					ft_pwd(void);
-int					ft_builtin_exit(int *exit_info); 
+int					ft_builtin_exit(int *exit_info);
 
 // Builtin_env.c
 int					ft_env(t_call *call, int option);   //ici

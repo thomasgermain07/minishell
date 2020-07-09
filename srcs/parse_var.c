@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/25 15:12:10 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/08 18:38:12 by atetu            ###   ########.fr       */
+/*   Updated: 2020/07/09 14:28:15 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,27 +71,6 @@ static char		*replace_var(char *str, int index, t_list **env, int option)
 	return (temp);
 }
 
-static int odd_nb_backslash(char *str, int i)    ///ICI
-{
-	int count;
-
-	count = 1;
-	if (i == 0)
-		return (1);
-	while (i > 0)
-	{
-		if (str[i - 1] == '\\')
-		{
-			count++;
-			i--;
-		}
-	}
-	if (count % 2 == 0)
-		return (0);
-	else
-		return (1);
-}
-
 char			*parse_var(char *str, t_list **env)
 {
 	int			i;
@@ -105,9 +84,9 @@ char			*parse_var(char *str, t_list **env)
 	{
 		if (str[i] == '$' && !is_valide(str, i, 0))
 		{
-			if (i > 0 && str[i - 1] == '\\' && odd_nb_backslash(str, i - 1)) //ici
+			if (i > 0 && str[i - 1] == '\\') //ici
 				;
-			else if (str[i + 1] && str[i + 1] == '?') // marche pas encore
+			else if (str[i + 1] && str[i + 1] == '?')
 				str = replace_var(str, i, env, 1);
 			else
 				str = replace_var(str, i, env, 0);

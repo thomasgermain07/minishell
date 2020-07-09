@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 16:58:27 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/08 18:24:08 by atetu            ###   ########.fr       */
+/*   Updated: 2020/07/09 14:29:19 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,13 @@ char			*parse_quotes(char *str)
 			in_quote == 1 ? in_quote-- : in_quote++;
 			str[i] = -1;
 		}
-		else if (str[i] == '\\' &&
-			(i == 0 || (i > 0 && str[i - 1] != -2)) && !in_quote && !in_dquote)  //ICI
-			str[i] = -2;
+		else if (str[i] == '\\' && (i == 0 || (i > 0 && str[i - 1] != -2)))  //ICI
+			{
+				if (!in_quote && !in_dquote)
+					str[i] = -2;
+				else if (in_dquote && str[i + 1] && ft_strchr("$'\\\"", str[i + 1]))
+					str[i] = -2;
+			}
 	}
 	return (replace_str(str));
 }
