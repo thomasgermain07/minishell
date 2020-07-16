@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/09 17:06:54 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/16 15:18:19 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ void			prompt(char **env)
 	t_list		**list;
 	char 		**split_args;
 	int			i;
-	int			go_on; //ici
+	int			go_on;
 
-	go_on = 0;   //ici
+	go_on = 0;
 	list = tab_to_list(env);
 	args = NULL;
 	split_args = NULL;

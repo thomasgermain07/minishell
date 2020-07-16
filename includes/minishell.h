@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/09 18:42:18 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/16 14:48:36 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef	struct		s_call
 }					t_call;
 
 // variables globales
-pid_t				*g_pids;  //ALICE
+pid_t				*g_pids;
 int					exit_status;
 
 ///////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ void				exec_knonw(t_call *call, char **func, char **var_env, int *exit_info);
 
 // Builtin.c
 int	 				ft_echo(char **func);
-int 				ft_cd(char **func);
+int 				ft_cd(t_call *call, char **func);
 int					ft_pwd(void);
 int					ft_builtin_exit(int *exit_info);
 

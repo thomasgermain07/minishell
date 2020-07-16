@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/29 21:54:49 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/08 20:06:26 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/16 15:19:24 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,22 @@ int				ft_echo(char **func)
 	return (EXIT_SUCCESS);
 }
 
-int				ft_cd(char **func)
+int				ft_cd(t_call *call, char **func)
 {
-	char		*buf;
-	int			i;
+	char		*old_pwd[3];
 
-	buf = NULL;
-	i = 0;
-	if (func[1] && chdir(func[1]) == -1)
+	old_pwd[1] = ft_strjoin("OLDPWD=", get_cwd());
+	old_pwd[2] = NULL;
+	if (func[1])
 	{
-		ft_printf_e("Minishell: cd: %s: %s\n", func[1], strerror(errno));
-		return (EXIT_FAILURE);
+		if (chdir(func[1]) == -1)
+			ft_printf_e("Minishell: cd: %s: %s\n", func[1], strerror(errno));
+		else
+		{
+			ft_export(call, old_pwd);
+			free(old_pwd[1]);
+			return (EXIT_FAILURE);
+		}
 	}
 	return (EXIT_SUCCESS);
 }
