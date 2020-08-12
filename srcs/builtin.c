@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/29 21:54:49 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/16 15:19:24 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/12 23:47:36 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,30 @@ int				ft_echo(char **func)
 	return (EXIT_SUCCESS);
 }
 
-int				ft_cd(t_call *call, char **func)
+int				ft_cd(t_call *call, char **func) // ne marche pas encore j'y travaille
 {
-	char		*old_pwd[3];
+	char		*old_pwd;
 
-	old_pwd[1] = ft_strjoin("OLDPWD=", get_cwd());
-	old_pwd[2] = NULL;
+	old_pwd = ft_strdup(find_value("PWD=", call->env) + 4);
 	if (func[1])
 	{
-		if (chdir(func[1]) == -1)
-			ft_printf_e("Minishell: cd: %s: %s\n", func[1], strerror(errno));
-		else
+		if (ft_strlen(func[1]) == 1 && func[1][0] == '-')
 		{
-			ft_export(call, old_pwd);
-			free(old_pwd[1]);
+			if (chdir(find_value("OLDPWD=", call->env) + 7) != -1)
+				ft_printf("%s\n", find_value("OLDPWD=", call->env) + 7);
+		}
+		else if (chdir(func[1]) == -1)
+		{
+			ft_printf_e("Minishell: cd: %s: %s\n", func[1], strerror(errno));
+			free(old_pwd);
 			return (EXIT_FAILURE);
 		}
 	}
+	else
+		chdir(find_value("HOME=", call->env) + 5);
+	add_env(call, "PWD=", get_cwd(), 1);
+	add_env(call, "OLDPWD=", old_pwd, 1);
+	free(old_pwd);
 	return (EXIT_SUCCESS);
 }
 
