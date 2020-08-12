@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/30 17:24:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/09 18:45:04 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/12 17:24:41 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int				ft_unset(t_call *call, char **func)
 	i = 0;
 	while (func[++i])
 	{
+		printf("%s\n", func[i]);
 		key = ft_strjoin(func[i], "=");
-		if (find_value(key, call->env))
-			delete_element(call, key);
+		delete_element(call->env, key);
 		free(key);
 	}
 	return (EXIT_SUCCESS);

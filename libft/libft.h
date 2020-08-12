@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:28:33 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/09 14:17:51 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/12 16:28:20 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # define VALID_FLAGS "-.0*"
 # define LEFT 1
 # define RIGHT 0
-
 
 typedef struct		s_list
 {

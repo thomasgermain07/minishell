@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/16 15:18:19 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/12 16:27:32 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void			prompt(char **env)
 	args = NULL;
 	split_args = NULL;
 	i = -1;
+	delete_element(list, "OLDPWD=");
+	ft_lstadd_back(list, ft_lstnew(ft_strdup("OLDPWD=")));
 	while (1)
 	{
 		g_pids = NULL;

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:52:48 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/09 18:26:24 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/12 16:04:40 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,19 @@ int				add_env(t_call *call, char *key, char *value, int option)
 	return (EXIT_FAILURE);
 }
 
-int				delete_element(t_call *call, char *key)
+int				delete_element(t_list **env, char *key)
 {
 	t_list		*current;
 	t_list		*previous;
 
-	current = *call->env;
+	current = *env;
 	previous = current;
 	while (current)
 	{
 		if (!ft_strncmp(key, (char *)current->content, ft_strlen(key)))
 		{
 			if (previous == current)
-				call->env = &(current->next);
+				env = &(current->next);
 			else
 				previous->next = current->next;
 			ft_lstdelone(current, free);
