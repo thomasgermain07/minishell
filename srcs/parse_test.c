@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/17 14:48:07 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/17 15:56:07 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/17 22:44:02 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,10 @@ static char		*get_var_name(char *str) // parse the name from the arguments
 	i = -1;
 	if (str[0] == '?')
 		return (ft_strdup("?="));
+	if (!ft_isalpha(str[0])) // check if str[0] is aplha (error if digit)
+		return (ft_strdup("\0"));
 	while (str[++i])
-		if (!ft_isdigit(str[i]) && !ft_isalpha(str[i]) &&
-			str[i] != '_') // check if str[0] is aplha (error if digit)
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 			break ;
 	if (!(var_name = malloc(sizeof(char) * (i + 2))))
 		return (NULL);
@@ -217,6 +218,7 @@ static char		*parse_var(char *str, t_list **env)
 			}
 			else
 				str = fill_var1(str, i, env);
+			i = -1;
 		}
 		else if (str[i] == '~' && !is_valide(str, i, 1))
 			str = fill_tilde(str, i);

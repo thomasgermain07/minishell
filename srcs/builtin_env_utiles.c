@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:52:48 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/17 16:45:17 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/17 22:15:13 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ char			*get_key(char *str)
 			break ;
 	if (str[i] == '=')
 		return (ft_substr(str, 0, i + 1));
-	return (ft_strjoin_f1(ft_substr(str, 0, i), "="));   //ICI
-//	return (ft_substr(str, 0, i));
+	return (ft_strjoin_f1(ft_substr(str, 0, i), "="));
 }
 
 int				replace_env_var(void **content, void *var, char *tmp)
