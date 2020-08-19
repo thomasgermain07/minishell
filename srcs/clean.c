@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:25:17 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/17 15:38:10 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/19 14:18:24 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,5 @@ void			clear_all(char *args, t_list **list)
 	free(g_pwd);
 	free(g_oldpwd);
 	free(g_home);
+	free(g_last);
 }

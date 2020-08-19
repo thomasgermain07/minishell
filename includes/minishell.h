@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/17 14:53:34 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/19 14:17:03 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char				*g_pwd;//ICI stocke pwd de toute facon
 char				*g_oldpwd; //ICI stocke oldpwd
 int					g_ret;
 char				*g_home;
+char				*g_last;
 //char				*var_path;
 
 ///////////////////////////////////////////////////////////////

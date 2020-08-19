@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:44:15 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/17 14:48:52 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/19 14:34:48 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int				main(int ac, char **av, char **env)
 	}
 	g_pwd = ft_strdup(getcwd(buf, 512));  // a free
 	g_oldpwd = ft_strdup("");  //a free
+	g_last = ft_strjoin(get_cwd(), "/minishell");
 	prompt(env);
 	return (0);
 }

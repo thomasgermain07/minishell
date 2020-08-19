@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/30 17:24:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/17 22:20:49 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/19 15:42:10 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,23 +87,31 @@ int				ft_env1(t_call *call)
 	t_list		*current;
 	t_list		**sorted_list;
 	char		*key;
+	char		*temp;
 
 	sorted_list = sort_var_env(call->env);
 	current = *sorted_list;
+	temp = ft_strjoin(get_cwd(), "/./minishell");
 	while (current)
 	{
-		write(1, "declare -x ", 11);
 		key = get_key((char *)current->content);
-		write(1, key, ft_strlen(key) - 1);
-		if (ft_strchr((char *)current->content, '='))
-			ft_printf("=\"%s\"\n", find_value(key, call->env, 1) + ft_strlen(key));
+		if (!ft_strncmp(key, "_=", 3) && ft_strncmp(find_value(key, call->env, 1) + 2, temp, ft_strlen(temp)))
+			free(key);
 		else
-			write(1, "\n", 1);
-		free(key);
+		{
+			write(1, "declare -x ", 11);
+			write(1, key, ft_strlen(key) - 1);
+			if (ft_strchr((char *)current->content, '='))
+				ft_printf("=\"%s\"\n", find_value(key, call->env, 1) + ft_strlen(key));
+			else
+				write(1, "\n", 1);
+			free(key);
+		}
 		current = current->next;
 	}
 	ft_lstclear(sorted_list, &free);
 	free(sorted_list);
+	free(temp);
 	return (EXIT_SUCCESS);
 }
 
