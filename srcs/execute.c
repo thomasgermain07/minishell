@@ -6,27 +6,38 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:47:56 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/19 15:26:20 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/19 15:49:52 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+static void		refresh_var_underscore(char **func, t_call *call)
+{
+	int			i;
+
+	i = -1;
+	while(func[++i])
+		;
+	if (!(!ft_strncmp(func[0], "export", ft_strlen(func[0])) && !func[1]))
+	{
+		if (find_value("_=", call->env, 1))
+			add_env(call, "_=", func[i - 1], 1);
+		else
+			add_env(call, "_=", func[i - 1], 0);
+	}
+}
+
 pid_t			exec1(t_call *call, int pipes[][2], int size, int *exit_info)
 {
 	char		**func;
-	int			i;
 	pid_t		pid;
 	char		**env_var;
 
-	i = -1;
 	env_var = list_to_tab(call->env);
 	if (!(func = parse(call->str, call->env)))
 		return (-1);
-	while(func[++i])
-		;
-	if (!ft_strncmp(func[0], "export", ft_strlen(func[0])) && !func[1])
-		add_env(call, "_=", func[i - 1], 1);
+	refresh_var_underscore(func, call);
 	if (!known_func(func[0]))
 		if (!(func[0] = parse_exec(call, func[0])))
 			return (-1);
@@ -48,15 +59,10 @@ void			exec2(t_call *call, int *exit_info)
 	char		**func;
 	char		**var_env;
 	pid_t		pid;
-	int			i;
 
-	i = -1;
 	if (!(func = parse(call->str, call->env)))
 		return ;
-	while(func[++i])
-		;
-	if (!(!ft_strncmp(func[0], "export", ft_strlen(func[0])) && !func[1]))
-		add_env(call, "_=", func[i - 1], 1);
+	refresh_var_underscore(func, call);
 	var_env = list_to_tab(call->env);
 	if (known_func(func[0]))
 	{
