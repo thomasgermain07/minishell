@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:47:56 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/19 15:49:52 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/20 15:21:06 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ pid_t			exec1(t_call *call, int pipes[][2], int size, int *exit_info)
 	pid_t		pid;
 	char		**env_var;
 
+	if (call->in == -1)
+		return (-1);
 	env_var = list_to_tab(call->env);
 	if (!(func = parse(call->str, call->env)))
 		return (-1);
@@ -60,6 +62,8 @@ void			exec2(t_call *call, int *exit_info)
 	char		**var_env;
 	pid_t		pid;
 
+	if (call->in == -1)
+		return ;
 	if (!(func = parse(call->str, call->env)))
 		return ;
 	refresh_var_underscore(func, call);

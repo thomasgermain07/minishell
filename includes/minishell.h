@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/19 14:17:03 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/20 15:20:46 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,6 @@ int					get_n_pipes(char *args, int option);
 
 // Parse_call.c
 void				parse_call(t_call *call, t_list **env);
-
-// Parse_var.c
-// char				*parse_var(char *str, char *func, t_list **env);  // ICI
-
-// Parse_quotes.c
-// char				*parse_quotes(char *str);
 
 // Parse_exec.c
 char				*parse_exec(t_call *call, char *bin);

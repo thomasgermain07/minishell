@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 16:15:55 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/17 21:54:43 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/20 15:20:52 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ static int		get_in_and_out(t_call *call, int *input, int *output)
 	return (EXIT_SUCCESS);
 }
 
-void			parse_call(t_call *call, t_list **env)
+void				parse_call(t_call *call, t_list **env)
 {
 	int			input;
 	int			output;
@@ -143,7 +143,11 @@ void			parse_call(t_call *call, t_list **env)
 	call->env = env;
 	call->in = -1;
 	call->out = -1;
-	get_in_and_out(call, &input, &output);
+	if (get_in_and_out(call, &input, &output) == 1)
+	{
+		call->in = -1;
+		return ;
+	}
 	if (!input)
 		call->in = 0;
 	if (!output)
