@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/17 14:48:07 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/19 15:11:27 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/22 16:53:48 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void		parse_backslash(char *str) // replace backslashes by -1
 		{
 			if (!in_quote && !in_dquote)
 				str[i] = -1;
-			else if (in_dquote && str[i + 1] && ft_strchr("$'\\\"", str[i + 1]))
+			else if (in_dquote && str[i + 1] && ft_strchr("$\\\"", str[i + 1]))  // ICI ft_strchr -> pas le simple quote
 				str[i] = -1;
 		}
 	}
@@ -123,6 +123,7 @@ static char		*fill_var1(char *str, int index, t_list **env)
 	char		*new_str;
 	char		*after_var;
 
+	after_var = NULL;
 	if (!(var_name = get_var_name(&str[index + 1])))
 		return (str);
 	if (!ft_strncmp(var_name, "00", 3))
@@ -135,15 +136,21 @@ static char		*fill_var1(char *str, int index, t_list **env)
 		var_value = ft_strdup(find_value(var_name, env, 1) + ft_strlen(var_name));
 	else
 		var_value = ft_strdup("");
-	if (!(new_str = malloc(sizeof(char) * (ft_strlen(str) - ft_strlen(var_name) + ft_strlen(var_value)))))
+	if (ft_strlen(str) - ft_strlen(var_name) + ft_strlen(var_value) == 0)
+		new_str = ft_strdup("");
+	else if (!(new_str = malloc(sizeof(char) * (ft_strlen(str) - ft_strlen(var_name) + ft_strlen(var_value)))))
 		return (NULL);
 	ft_strlcpy(new_str, str, index + 1);
 	ft_strlcpy(new_str + ft_strlen(new_str), var_value, ft_strlen(var_value) + 1);
-	after_var = str + index + ft_strlen(var_name);
+	if (str[index + ft_strlen(var_name)])
+		after_var = ft_strdup(&str[index + ft_strlen(var_name)]);  // ICI a malloquer sinon erreur pour echo \"\\$TEST\|\"$1\\$444
+	else
+		after_var = ft_strdup("");
 	ft_strlcpy(new_str + ft_strlen(new_str), after_var, ft_strlen(after_var) + 1);
 	free(var_name);
 	free(var_value);
 	free(str);
+	free(after_var);
 	return (new_str);
 }
 
@@ -200,9 +207,10 @@ static char		*fill_tilde(char *str, int index)
 		return (NULL);
 	ft_strlcpy(new_str, str, index + 1);
 	ft_strlcpy(new_str + ft_strlen(new_str), g_home, ft_strlen(g_home) + 1);
-	after_var = str + index + 1;
+	after_var = ft_strdup(str + index + 1);
 	ft_strlcpy(new_str + ft_strlen(new_str), after_var, ft_strlen(after_var) + 1);
 	free(str);
+	free(after_var);
 	return (new_str);
 }
 
@@ -224,6 +232,11 @@ static char		*parse_var(char *str, t_list **env)
 			}
 			else
 				str = fill_var1(str, i, env);
+			if (!is_valide(str, i, 1) && !ft_strlen(str))
+			{
+				free(str);
+				return (ft_strdup("\x80\xf5"));
+			}
 			i = -1;
 		}
 		else if (str[i] == '~' && !is_valide(str, i, 1))
@@ -244,7 +257,10 @@ static char		*replace_marks(char *str)
 		if (str[i] > 0)
 			j++;
 	if (!j)
+	{
+		free(str);
 		return (ft_strdup(""));
+	}
 	if (!(new_str = malloc(sizeof(char) * (j + 1))))
 		return (NULL);
 	i = -1;
@@ -252,7 +268,7 @@ static char		*replace_marks(char *str)
 	while (str[++i])
 	{
 		if (str[i] < 0)
-			;
+		 	;
 		else
 			new_str[j++] = str[i];
 	}
@@ -263,7 +279,6 @@ static char		*replace_marks(char *str)
 
 static char		*parse_arg(char *str, t_list **env) // will be used to parse a str | need to make a func to cut args before parsing them
 {
-	parse_backslash(str);
 	if (check_closed(str))
 	{
 		free(str);
@@ -271,8 +286,11 @@ static char		*parse_arg(char *str, t_list **env) // will be used to parse a str 
 	}
 	if (!(str = parse_var(str, env)))
 		return (NULL);
-	parse_quotes(str);
-	str = replace_marks(str);
+	if (ft_strncmp(str, "\x80\xf5", ft_strlen(str)))
+	{
+		parse_quotes(str);
+		str = replace_marks(str);
+	}
 	return (str);
 }
 
@@ -300,7 +318,7 @@ static void		replace_g_last(char **last, char *last_arg)
 	*last = ft_strdup(last_arg);
 }
 
-char			**parse(char *str, t_list **env)
+char			**parse(char *str, t_list **env) // leaks here with the array (because it change length)
 {
 	char		**tab;
 	int			i;
@@ -310,6 +328,7 @@ char			**parse(char *str, t_list **env)
 	n = 0;
 	if (!str || !ft_strlen(str))
 		return (NULL);
+	parse_backslash(str);
 	n_args = get_n_args(str) + 1;
 	if (!(tab = malloc(sizeof(char *) * (n_args + 1))))
 		return (NULL);
@@ -325,6 +344,12 @@ char			**parse(char *str, t_list **env)
 		{
 			clean_array(tab);
 			return (NULL);
+		}
+		if (!ft_strncmp(tab[n - 1], "\x80\xf5", 3))
+		{
+			free(tab[n - 1]);
+			n--;
+			n_args--;
 		}
 		str = str + i;
 	}

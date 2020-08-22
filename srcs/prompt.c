@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/20 15:18:10 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/22 16:52:10 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,12 @@ void			wait_pids(pid_t *pids, int size, t_call *calls)
 	(void)calls;
 	while (++i < size && pids[i] != -1)
 	{
+	//	printf("la\n");fflush(stdout);
 		waitpid(pids[i], &status, 0);
+	//	printf("coucou\n");fflush(stdout);
 		if (WIFEXITED(status))
 		{
+	//		printf("ici\n");fflush(stdout);
 			g_exit_status = WEXITSTATUS(status);
 			g_exit_nb = g_exit_status;
 		}
@@ -97,6 +100,17 @@ static int		parse_args(char *args, t_list **list)
 	return (ret);
 }
 
+void set_g_home(t_list **list)
+{
+	char		*value;
+
+	value = find_value("HOME=", list, 1); // ICI
+	if (value)   //ICI
+		g_home = ft_strdup(value + 5); //ICI
+	else
+		g_home = ft_strdup("");
+}
+
 void			prompt(char **env)
 {
 	char		*args;
@@ -106,7 +120,8 @@ void			prompt(char **env)
 
 	go_on = 0;
 	list = tab_to_list(env);
-	g_home = ft_strdup(find_value("HOME=", list, 1) + 5);
+	set_g_home(list);
+	//g_home = ft_strdup(find_value("HOME=", list, 1) + 5); // ICI
 	args = NULL;
 	split_args = NULL;
 	while (1)
@@ -122,6 +137,5 @@ void			prompt(char **env)
 		free(args);
 	}
 	clear_all(args, list);
-	// system("leaks minishell");
 	exit(g_exit_nb);
 }
