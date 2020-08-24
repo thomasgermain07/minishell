@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:52:48 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 15:31:44 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:33:49 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,34 @@ static int		replace_env_var(void **content, void *var, char *tmp)
 	*content = (void *)var;
 	free(tmp);
 	return (1);
+}
+
+void			add_env2(t_call *call, char *key, char *value)
+{
+	char		*var;
+	t_list		*current;
+
+	current = *call->env;
+	if (find_value(key, call->env, 1))
+	{
+		var = ft_strjoin(find_value(key, call->env, 1), value);
+		while (current)
+		{
+			if (!ft_strncmp(key, (char *)current->content, ft_strlen(key)))
+			{
+				free(current->content);
+				current->content = (void *)var;
+				break ;
+			}
+			current = current->next;
+		}
+	}
+	else
+	{
+		var = ft_strjoin(key, value);
+		ft_lstadd_back(call->env, ft_lstnew(var));
+	}
+	free(key);
 }
 
 int				add_env(t_call *call, char *key, char *value, int option)

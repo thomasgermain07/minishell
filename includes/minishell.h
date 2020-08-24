@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 15:37:28 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:05:01 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void				exec_knonw(t_call *call, char **func, char **var_env,
 void				handle_shlvl(t_list **list);
 char				**parse(char *str, t_list **env);
 
+void				add_env2(t_call *call, char *key, char *value);
 /*
 ** Builtins
 */

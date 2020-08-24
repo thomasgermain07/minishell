@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/30 17:24:16 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 15:29:51 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:33:07 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ static int		check_export_errors(char *func)
 {
 	int			i;
 
-	if (func[0] == '=')
+	if (func[0] == '=' || func[0] == '+')
 	{
 		// ft_printf_e("minishell: export: '%s': not a valid identifier\n", func);
 		ft_printf_e("bash: line 1: export: ");
@@ -144,7 +144,7 @@ static int		check_export_errors(char *func)
 	i = 0;
 	while (func[i] && func[i] != '=')
 	{
-		if (!ft_isalnum((int)func[i]) && func[i] != '_')
+		if (!ft_isalnum((int)func[i]) && func[i] != '_' && func[i] != '+') // gere si le + est au milieu de la chaine
 		{
 			// ft_printf_e("minishell: export: '%s': not a valid identifier\n", func);
 			ft_printf_e("bash: line 1: export: ");
@@ -162,6 +162,21 @@ static void		export_alone(char *str, t_call *call)
 		ft_env1(call);
 }
 
+static char		*delete_plus(char *str)
+{
+	char		*new_str;
+	int			i;
+
+	if (!(new_str = malloc(sizeof(char) * (ft_strlen(str)))))
+		return (NULL);
+	i = -1;
+	while (++i < (int)ft_strlen(str) - 2)
+		new_str[i] = str[i];
+	new_str[i] = '=';
+	new_str[i + 1] = '\0';
+	return (new_str);
+}
+
 int			ft_export(t_call *call, char **func)
 {
 	int			i;
@@ -176,7 +191,9 @@ int			ft_export(t_call *call, char **func)
 		if (func[i][0] != '=')
 		{
 			key = get_key(func[i]);
-			if (find_value(key, call->env, 1))
+			if (key[ft_strlen(key) - 2] == '+')
+				add_env2(call, delete_plus(key), ft_strchr(func[i], '=') + 1);
+			else if (find_value(key, call->env, 1))
 			{
 				if (ft_strchr(func[i], '='))
 					add_env(call, key, ft_strchr(func[i], '=') + 1, 1);
