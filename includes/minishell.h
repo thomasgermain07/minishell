@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 15:35:13 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 15:37:28 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,21 @@ void				clean_calls(t_call *calls);
 void				close_pipes(int pipes[][2], int size);
 void				clean_array(char **array);
 void				clear_all(char *args, t_list **list);
+
+
+/*
+** Rajout Alice
+*/
+
+
+
+
+/*
+** Rajout Thomas
+*/
+
+
+
+
 
 #endif
