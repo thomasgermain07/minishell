@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:52:48 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/17 22:15:13 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 15:31:44 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ char			*get_key(char *str)
 	return (ft_strjoin_f1(ft_substr(str, 0, i), "="));
 }
 
-int				replace_env_var(void **content, void *var, char *tmp)
+static int		replace_env_var(void **content, void *var, char *tmp)
 {
-		free(*content);
-		*content = (void *)var;
-		free(tmp);
+	free(*content);
+	*content = (void *)var;
+	free(tmp);
 	return (1);
 }
 
@@ -49,7 +49,7 @@ int				add_env(t_call *call, char *key, char *value, int option)
 		{
 			tmp = ft_substr(key, 0, ft_strlen(key) - 1);
 			if ((!ft_strncmp(key, (char *)current->content, ft_strlen(key))) ||
-			(!ft_strncmp(tmp, (char *)current->content, ft_strlen(tmp)) &&     // la pour ajouter var env si var seulement present dans export, donc sans =
+			(!ft_strncmp(tmp, (char *)current->content, ft_strlen(tmp)) &&
 			((char *)current->content)[ft_strlen(tmp)] == '\0'))
 				if (replace_env_var(&current->content, (void *)var, tmp))
 					break ;
@@ -114,7 +114,7 @@ static void		swap(t_list *s1, t_list *s2)
 
 t_list			**sort_var_env(t_list **env)
 {
-	t_list 		**list;
+	t_list		**list;
 	char		*key1;
 	char		*key2;
 	t_list		*current;
@@ -127,8 +127,8 @@ t_list			**sort_var_env(t_list **env)
 		next = current->next;
 		key1 = get_key((char *)current->content);
 		key2 = get_key((char *)next->content);
-		if (ft_strncmp(key1, key2,
-			ft_strlen(key1) > ft_strlen(key2) ? ft_strlen(key1) : ft_strlen(key2)) > 0)
+		if (ft_strncmp(key1, key2, ft_strlen(key1) > ft_strlen(key2) ?
+			ft_strlen(key1) : ft_strlen(key2)) > 0)
 		{
 			swap(current, next);
 			current = *list;

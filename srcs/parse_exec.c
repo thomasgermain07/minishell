@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:45:09 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/22 15:34:35 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 15:24:55 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,10 @@ static int		is_dir(char *bin)
 {
 	if (ft_strlen(bin) == 1 && bin[0] == '.')
 	{
-		ft_printf("bash: .: filename argument required .:\n"); // a modifier plus tard
+		ft_printf("bash: .: filename argument required .:\n");
 		ft_printf("usage: . filename [arguments]\n");
-		g_exit_status = 2;  //ICI
-		g_exit_nb = g_exit_status; // ICI
+		g_exit_status = 2;
+		g_exit_nb = g_exit_status;
 		return (-1);
 	}
 	else if (!ft_strncmp(bin, "/", 1) || !ft_strncmp(bin, "./", 2))
@@ -94,13 +94,13 @@ static int		is_dir(char *bin)
 	return (0);
 }
 
-int				set_exec(char **var, char **bin, char ***paths, t_call *call)  //ICI
+static int		set_exec(char **var, char **bin, char ***paths, t_call *call)
 {
 	int ret;
 
 	if ((ret = is_dir(*bin)) == -1)
 		return (-1);
-	*var = find_value("PATH=", call->env, 1); //ICI
+	*var = find_value("PATH=", call->env, 1);
 	if ((*bin)[0] && (*bin)[1] && (*bin)[0] == '.' && (*bin)[1] == '/')
 		*bin = fill_pwd(*bin);
 	if (*var == NULL)
@@ -110,19 +110,20 @@ int				set_exec(char **var, char **bin, char ***paths, t_call *call)  //ICI
 	return (ret);
 }
 
-int				check_double_points(char *original_bin) //ICI
+int				check_double_points(char *original_bin)
 {
 	if (!ft_strncmp(original_bin, "..", 3))
 	{
 		ft_printf_e("bash: ..: command not found\n");
-		g_exit_status = 127;   // ICI
-		g_exit_nb = g_exit_status; // ICI
+		g_exit_status = 127;
+		g_exit_nb = g_exit_status;
 		return (0);
 	}
 	return (1);
 }
 
-int				check_existing_path(char **path, char ***paths, char **bin, char **original_bin) // ICI
+static int		check_existing_path(char **path, char ***paths,
+	char **bin, char **original_bin)
 {
 	if (*path && !ft_strlen(*path))
 	{
@@ -133,33 +134,38 @@ int				check_existing_path(char **path, char ***paths, char **bin, char **origin
 	return (1);
 }
 
-char			*parse_exec(t_call *call, char *bin) // return null si probleme
+static void		handle_error(int ret, char *var, char *original_bin)
+{
+	if (ret == 1 || !var)
+		ft_printf_e("bash: line 1: %s: %s\n", original_bin, strerror(errno));
+	else
+		ft_printf_e("bash: line 1: %s: command not found\n", original_bin);
+}
+
+char			*parse_exec(t_call *call, char *bin)
 {
 	char		**paths;
-	char		*original_bin;
+	char		*bin_cpy;
 	char		*path;
 	char		*var;
 	int			ret;
 
 	path = NULL;
-	original_bin = ft_strdup(bin);
-	if ((ret = set_exec(&var, &bin, &paths, call)) == -1) //ICI norminette
+	bin_cpy = ft_strdup(bin);
+	if ((ret = set_exec(&var, &bin, &paths, call)) == -1)
 		return (NULL);
 	if (!(check_double_points(bin)))
 		return (NULL);
-	else if (!(path = find_path(paths, bin, original_bin)))
+	else if (!(path = find_path(paths, bin, bin_cpy)))
 	{
-		if (ret == 1 || !var)  // ICI  si PATH est unset, le message d'erreur ne sera jamais "commad not found"
-			ft_printf_e("bash: line 1: %s: %s\n", original_bin, strerror(errno));
-		else // ICI
-			ft_printf_e("bash: line 1: %s: command not found\n", original_bin); //ICI
-		g_exit_status = 127; // ICI
-		g_exit_nb = g_exit_status; //ICI
-		clean_exec(&paths, &bin, &original_bin);
+		handle_error(ret, var, bin_cpy);
+		g_exit_status = 127;
+		g_exit_nb = g_exit_status;
+		clean_exec(&paths, &bin, &bin_cpy);
 		return (NULL);
 	}
-	if (!(check_existing_path(&path, &paths, &bin, &original_bin))) // ICI
-		return (NULL); //ICI
-	clean_exec(&paths, &bin, &original_bin);
+	if (!(check_existing_path(&path, &paths, &bin, &bin_cpy)))
+		return (NULL);
+	clean_exec(&paths, &bin, &bin_cpy);
 	return (path);
 }
