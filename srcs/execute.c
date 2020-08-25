@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:47:56 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 15:21:33 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:23:39 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static void		refresh_var_underscore(char **func, t_call *call)
-{
-	int			i;
-
-	i = -1;
-	while (func[++i])
-		;
-	if (!(!ft_strncmp(func[0], "export", ft_strlen(func[0])) && !func[1]))
-	{
-		if (find_value("_=", call->env, 1))
-			add_env(call, "_=", func[i - 1], 1);
-		else
-			add_env(call, "_=", func[i - 1], 0);
-	}
-}
-
-static int		check_call_in(int in)
-{
-	if (in == -1)
-	{
-		g_exit_status = 1;
-		g_exit_nb = 1;
-		return (0);
-	}
-	return (1);
-}
 
 static pid_t	exit_exec1(char ***func, char ***env_var,
 	int *exit_info, pid_t pid)

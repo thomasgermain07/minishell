@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 16:05:01 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/25 10:15:38 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void				exec_knonw(t_call *call, char **func, char **var_env,
 void				handle_shlvl(t_list **list);
 char				**parse(char *str, t_list **env);
 
-void				add_env2(t_call *call, char *key, char *value);
 /*
 ** Builtins
 */
@@ -114,14 +113,38 @@ void				clear_all(char *args, t_list **list);
 ** Rajout Alice
 */
 
-
+int					get_fd(char *str, int option);
+void				refresh_var_underscore(char **func, t_call *call);
+int					check_call_in(int in);
+int					check_double_points(char *original_bin);
+int					check_existing_path(char **path, char ***paths,
+						char **bin, char **original_bin);
+char				*check_is_file(char *bin, char *original_bin);
+void				clean_exec(char **paths[], char **bin, char **original_bin);
+void				handle_error(int ret, char *var, char *original_bin);
+void				manage_pipes(t_call *calls, int pipes[][2],
+						char *str, int *exit_info);
+char				*delete_marks(char *str, int j);
+char				*replace_marks(char *str);
+char				*parse_var(char *str, t_list **env);
+char				*get_var_name(char *str);
+char				*get_var_value(char *key, t_list **env);
+char				*create_new_str(char *str, char *key, char *value,
+						int index);
+char				*create_new_str2(char *str, char *key, char *value,
+						int index);
+char				*parse_arg(char *str, t_list **env);
+int					get_n_args(char *str);
+int					check_closed(char *str);
+void				parse_quotes(char *str);
+int					ft_env1(t_call *call);
 
 
 /*
 ** Rajout Thomas
 */
 
-
+void				add_env2(t_call *call, char *key, char *value);
 
 
 

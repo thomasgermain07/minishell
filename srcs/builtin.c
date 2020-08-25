@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/29 21:54:49 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 15:27:55 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 17:33:47 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int				ft_cd(char **func, t_call *call)
 	return (EXIT_SUCCESS);
 }
 
-int					ft_pwd(void)
+int				ft_pwd(void)
 {
 	char		buf[512];
 	char		*current;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:45:09 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 15:24:55 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/24 16:36:38 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,6 @@ static char		*fill_pwd(char *bin)
 	free(bin);
 	free(cwd);
 	return (temp);
-}
-
-static char		*check_is_file(char *bin, char *original_bin)
-{
-	struct stat		stats;
-
-	ft_memset(&stats, 0, sizeof(stats));
-	if (stat(bin, &stats) != -1)
-	{
-		if (S_ISDIR(stats.st_mode))
-		{
-			ft_printf_e("bash: %s: is a directory\n", original_bin);
-			return (ft_strdup(""));
-		}
-		return (ft_strdup(bin));
-	}
-	return (NULL);
 }
 
 static char		*find_path(char **paths, char *bin, char *original_bin)
@@ -70,13 +53,6 @@ static char		*find_path(char **paths, char *bin, char *original_bin)
 		}
 	}
 	return (NULL);
-}
-
-static void		clean_exec(char **paths[], char **bin, char **original_bin)
-{
-	clean_array(*paths);
-	free(*bin);
-	free(*original_bin);
 }
 
 static int		is_dir(char *bin)
@@ -108,38 +84,6 @@ static int		set_exec(char **var, char **bin, char ***paths, t_call *call)
 	else
 		*paths = ft_split(*var, ':');
 	return (ret);
-}
-
-int				check_double_points(char *original_bin)
-{
-	if (!ft_strncmp(original_bin, "..", 3))
-	{
-		ft_printf_e("bash: ..: command not found\n");
-		g_exit_status = 127;
-		g_exit_nb = g_exit_status;
-		return (0);
-	}
-	return (1);
-}
-
-static int		check_existing_path(char **path, char ***paths,
-	char **bin, char **original_bin)
-{
-	if (*path && !ft_strlen(*path))
-	{
-		free(*path);
-		clean_exec(paths, bin, original_bin);
-		return (0);
-	}
-	return (1);
-}
-
-static void		handle_error(int ret, char *var, char *original_bin)
-{
-	if (ret == 1 || !var)
-		ft_printf_e("bash: line 1: %s: %s\n", original_bin, strerror(errno));
-	else
-		ft_printf_e("bash: line 1: %s: command not found\n", original_bin);
 }
 
 char			*parse_exec(t_call *call, char *bin)
