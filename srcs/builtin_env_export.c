@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env_export.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 18:02:17 by atetu             #+#    #+#             */
-/*   Updated: 2020/08/25 11:47:58 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/28 15:11:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ static int		check_export_errors(char *func)
 
 	if (func[0] == '=' || func[0] == '+')
 	{
-		// ft_printf_e("minishell: export: '%s': not a valid identifier\n", func);
-		ft_printf_e("bash: line 1: export: ");
+		ft_printf_e("minishell : export: ");
 		ft_printf_e("`%c': not a valid identifier\n", func[0]);
 		return (EXIT_FAILURE);
 	}
@@ -28,10 +27,9 @@ static int		check_export_errors(char *func)
 	{
 		if (func[i] == '+' && func[i + 1] == '=')
 			;
-		else if (!ft_isalnum((int)func[i]) && func[i] != '_')
+		else if (!ft_isalnum((int)func[i]) && func[i] != '_' && func[i] != '+')
 		{
-			// ft_printf_e("minishell: export: '%s': not a valid identifier\n", func);
-			ft_printf_e("bash: line 1: export: ");
+			ft_printf_e("minishell : export: ");
 			ft_printf_e("`%c': not a valid identifier\n", func[i]);
 			return ((g_exit_nb = EXIT_FAILURE));
 		}
@@ -61,13 +59,13 @@ static char		*delete_plus(char *str)
 	return (new_str);
 }
 
-static void	check_add_env(char **func, int i, t_call *call, char *key)
+static void		check_add_env(char **func, int i, t_call *call, char *key)
 {
 	if (ft_strchr(func[i], '='))
 		add_env(call, key, ft_strchr(func[i], '=') + 1, 1);
 }
 
-int			ft_export(t_call *call, char **func)
+int				ft_export(t_call *call, char **func)
 {
 	int			i;
 	char		*key;

@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/29 21:54:49 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/24 17:33:47 by atetu            ###   ########.fr       */
+/*   Updated: 2020/08/30 12:56:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static int		check_flag(char **func, int i)
+{
+	if (i == 1 && !ft_strncmp(func[1], "-n", 3))
+		return (1);
+	if (i > 1)
+	{
+		if (!ft_strncmp(func[i], "-n", 3))
+		{
+			while (i > 1)
+			{
+				if (ft_strncmp(func[i], "-n", 3))
+					break ;
+				i--;
+			}
+			if (i == 1)
+				return (1);
+			return (0);
+		}
+	}
+	return (0);
+}
 
 int				ft_echo(char **func)
 {
@@ -19,10 +41,12 @@ int				ft_echo(char **func)
 
 	i = 0;
 	space = 1;
+	if (func[1] && ft_strncmp(func[1], "-n", 3) == 0)
+		space = 0;
 	while (func[++i])
 	{
-		if (ft_strncmp(func[i], "-n", 3) == 0)
-			space = 0;
+		if (check_flag(func, i))
+			;
 		else
 		{
 			if (write(1, func[i], ft_strlen(func[i])) == -1)
@@ -59,12 +83,14 @@ int				ft_cd(char **func, t_call *call)
 	int		i;
 
 	i = 0;
-	if (func[1] && chdir(func[1]) == -1)
+	if (func[1] && func[2])
 	{
-		ft_printf_e("bash: line 1: cd: %s: %s\n", func[1], strerror(errno));
-		//	ft_printf_e("minishell: cd: %s: %s\n", func[1], strerror(errno));
-		//  ft_printf_e("bash: ligne 1 : cd: %s: Aucun fichier ou dossier de ce type\n", func[1]);i // VM Testeur
-		//  ft_printf_e("minishell: cd: %s: Aucun fichier ou dossier de ce type\n", func[1]);i // VM Testeur
+		ft_printf_e("minishell: cd: too many argments\n");
+		return (EXIT_FAILURE);
+	}
+	else if (func[1] && chdir(func[1]) == -1)
+	{
+		ft_printf_e("minishell: cd: %s: %s\n", func[1], strerror(errno));
 		return (EXIT_FAILURE);
 	}
 	else if (!func[1])
@@ -86,8 +112,7 @@ int				ft_pwd(void)
 
 	if ((current = getcwd(buf, 512)) == NULL)
 	{
-		//ft_printf_e("Minishell: error: %s\n", strerror(errno));
-		ft_printf_e("bash: line 1: error: %s\n", strerror(errno));
+		ft_printf_e("minishell: error: %s\n", strerror(errno));
 		return (EXIT_FAILURE);
 	}
 	ft_printf("%s\n", current);

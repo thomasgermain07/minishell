@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exec_utiles.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 17:36:27 by atetu             #+#    #+#             */
-/*   Updated: 2020/08/24 17:37:01 by atetu            ###   ########.fr       */
+/*   Updated: 2020/08/28 14:52:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	clean_exec(char **paths[], char **bin, char **original_bin)
 void	handle_error(int ret, char *var, char *original_bin)
 {
 	if (ret == 1 || !var)
-		ft_printf_e("bash: line 1: %s: %s\n", original_bin, strerror(errno));
+		ft_printf_e("minishell: %s: no such file or directory\n", original_bin);
 	else
-		ft_printf_e("bash: line 1: %s: command not found\n", original_bin);
+		ft_printf_e("minishell: %s : command not found\n", original_bin);
 }

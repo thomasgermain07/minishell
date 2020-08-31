@@ -6,7 +6,7 @@
 #    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 08:26:20 by thgermai          #+#    #+#              #
-#    Updated: 2020/08/25 12:05:01 by thgermai         ###   ########.fr        #
+#    Updated: 2020/08/31 14:09:10 by thgermai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,16 +37,21 @@ SRCS = main.c\
 		parse_exec_utiles.c\
 		parse_global_marks.c\
 		parse_global_var.c\
+		parse_global_var_fill.c\
+		parse_global_var_validity.c\
+		parse_global_var_weird.c\
+		parse_global_var_weird_utiles.c\
 		parse_global_var_utiles.c\
 		parse_global_args.c\
 		builtin_env_add.c\
 		builtin_env_export.c\
-		builtin_env_unset.c
+		builtin_env_unset.c\
+		get_input.c
 OBJS = $(addprefix $(OBJSDIR)/, $(SRCS:.c=.o))
 DPDCS = $(OBJS:.o=.d)
 INCLUDES = -I includes/ -I libft/
 LIB = libft/libft.a
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 LOGFILE = $(LOGPATH) `date +'%y.%m.%d %H:%M:%S'`
 MSG = ---
 
@@ -58,11 +63,11 @@ all : $(NAME)
 -include $(DPDCS)
 
 fg : $(LIB) $(OBJS)
-	@(gcc $(CFLAGS) -g3 -fsanitize=address $(OBJS) $(LIB) $(INCLUDES) -o $(NAME))
+	@(clang $(CFLAGS) $(OBJS) $(LIB) $(INCLUDES) -o $(NAME))
 	@(echo "$(NAME) created")
 
 $(NAME) : $(LIB) $(OBJS)
-	@(gcc $(CFLAGS) $(OBJS) $(LIB) $(INCLUDES) -o $(NAME))
+	@(clang $(CFLAGS) $(OBJS) $(LIB) $(INCLUDES) -o $(NAME))
 	@(echo "$(NAME) created")
 
 $(LIB) :
@@ -70,16 +75,18 @@ $(LIB) :
 
 $(OBJSDIR)/%.o : $(SRCSDIR)/%.c | $(OBJSDIR)
 	@(echo "Compiling -> $^")
-	@(gcc $(CFLAGS) $(INCLUDES) -MMD -c $< -o $@)
+	@(clang $(CFLAGS) $(INCLUDES) -MMD -c $< -o $@)
 
 $(OBJSDIR) :
 	@(mkdir -p .objs)
 
 clean :
 	@(rm -f $(NAME))
+	@(make clean -C libft/)
 
 fclean : clean
 	@(rm -rf $(OBJSDIR))
+	@(make fclean -C libft/)
 
 git : fclean
 	@(make fclean -C libft)
