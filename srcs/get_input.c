@@ -35,7 +35,7 @@ static char		*refresh_stock(char *str, int i)
 {
 	char		*new_stock;
 
-	if (str[i])
+	if (str[i] && str[i + 1])
 		new_stock = ft_strdup(str + i + 1);
 	else
 		new_stock = NULL;
@@ -79,7 +79,7 @@ int				get_input(char **line, int *go_on)
 	while (stock[i] && stock[i] != '\n')
 		i++;
 	*line = ft_substr(stock, 0, i);
-	stock = refresh_stock(stock, i);
+	stock = refresh_stock(stock, i); 
 	if (ret || stock)
 		return (ft_exit_ret(1, &buffer, &stock));
 	return (ft_exit_ret(0, &buffer, &stock));
