@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_semicolons.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 15:24:14 by atetu             #+#    #+#             */
-/*   Updated: 2020/08/28 15:02:13 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/02 14:48:51 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int		syntax_error(void)
 {
-	g_exit_status = 258;
+	g_exit_status = 2;
 	g_exit_nb = 2;
 	ft_printf_e("minihell: syntax error near unexpected token ';'\n");
 	return (-1);
@@ -33,7 +33,7 @@ static int		get_n_semicolon(char *args, int option)
 	int			n_semicolon;
 	int			j;
 
-	i = 0;
+	i = -1;
 	n_semicolon = 0;
 	while (args[++i])
 	{
@@ -54,6 +54,45 @@ static int		get_n_semicolon(char *args, int option)
 		}
 	}
 	return (result_semicolon(option, n_semicolon));
+}
+
+static int		arg_is_valid(char *str)
+{
+	int			i;
+
+	i = -1;
+	while (str[++i])
+		if (str[i] != ' ')
+			return (1);
+	return (0);
+}
+
+static char		**check_args(char **tab, int n_semicolons)
+{
+	int			i;
+
+	i = -1;
+	while (tab[++i])
+	{
+		if (!ft_strlen(tab[i]) || !arg_is_valid(tab[i]))
+		{
+			ft_printf("error on %d\n", i);
+			if (tab[i + 1] && !ft_strlen(tab[i + 1]) && i < n_semicolons - 1)
+				ft_printf_e("bash: syntax error near unexpected token `;;'\n");
+			else
+				ft_printf_e("bash: syntax error near unexpected token `;'\n");
+			break;
+		}
+	}
+	if (i < n_semicolons)
+	{
+		i = -1;
+		while (tab[++i])
+			free(tab[i]);
+		free(tab);
+		return (NULL);
+	}
+	return (tab);
 }
 
 char			**parse_semicolon(char *str)
@@ -81,5 +120,8 @@ char			**parse_semicolon(char *str)
 	}
 	tab[j] = ft_substr(str + last_i, 0, ft_strlen(str + last_i));
 	tab[j + 1] = NULL;
+	for (int x = 0; tab[x]; x++)
+		ft_printf("tab[%d] = %s<-\n", x, tab[x]);
+	tab = check_args(tab, n_semicolons);
 	return (tab);
 }

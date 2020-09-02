@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/31 15:47:00 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/02 14:43:38 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void			prompt(char **env)
 	{
 		g_pids = NULL;
 		print();
-		if (!get_input(&args, &go_on))
+		if (!get_input(&args, &go_on, 1))
 			if (control_d())
 				break ;
 		if (ft_strlen(args))

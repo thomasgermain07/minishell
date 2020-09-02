@@ -47,12 +47,13 @@ char				*g_oldpwd;
 int					g_ret;
 char				*g_home;
 char				*g_last;
+int					g_file;
 
 /*
 **	-- Functions --
 */
 
-int					get_input(char **line, int *go_on);
+int					get_input(char **line, int *go_on, int opt);
 int					parse_args(char *args, t_list **list);
 void				set_g_home(t_list **list);
 void				control_c(int sig);

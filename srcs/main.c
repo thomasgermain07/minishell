@@ -16,6 +16,7 @@ static int		check_input(void)
 {
 	struct stat		buff;
 
+	g_file = 0;
 	fstat(STDIN_FILENO, &buff);
 	if (S_ISREG(buff.st_mode))
 		return (0);
@@ -28,17 +29,24 @@ static void		handle_file(char **env)
 	t_list		**list;
 	int			go_on;
 
-	go_on = 0;
+	go_on = 2;
+	g_file = 1;
 	list = tab_to_list(env);
 	set_g_home(list);
 	args = NULL;
-	while (get_input(&args, &go_on))
+	while (get_input(&args, &go_on, 2))
 	{
 		g_pids = NULL;
 		if (ft_strlen(args))
 			if (parse_args(args, list) == -1)
 				break ;
 		free(args);
+	}
+	if (args)
+	{
+		g_pids = NULL;
+		if (ft_strlen(args))
+			parse_args(args, list);
 	}
 	clear_all(args, list);
 	exit(g_exit_nb);

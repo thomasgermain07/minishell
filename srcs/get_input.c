@@ -45,10 +45,11 @@ static char		*refresh_stock(char *str, int i)
 
 static int		loop(int *go_on, int ret, char **buffer, char **stock)
 {
-	*go_on = 0;
+	if (*go_on != 2)
+		*go_on = 0;
 	(*buffer)[ret] = '\0';
 	*stock = ft_strjoin_f1(*stock, *buffer);
-	if ((*buffer)[ret - 1] != '\n')
+	if (*go_on != 2 && (*buffer)[ret - 1] != '\n')
 	{
 		*go_on = 1;
 		write(1, "  \b\b", 4);
@@ -56,7 +57,7 @@ static int		loop(int *go_on, int ret, char **buffer, char **stock)
 	return (1);
 }
 
-int				get_input(char **line, int *go_on)
+int				get_input(char **line, int *go, int opt)
 {
 	static char		*stock;
 	char			*buffer;
@@ -69,11 +70,11 @@ int				get_input(char **line, int *go_on)
 	if (!stock && !(stock = ft_calloc(sizeof(char), 1)))
 		return (ft_exit_ret(-1, &buffer, &stock));
 	while (!ft_strchr(buffer, '\n') &&
-		((ret = read(0, buffer, BUFFER_SIZE)) || (ret == 0 && *go_on)))
+		((ret = read(0, buffer, BUFFER_SIZE)) || (ret == 0 && *go && opt == 1)))
 	{
 		if (ret == -1)
 			return (ft_exit_ret(-1, &buffer, &stock));
-		loop(go_on, ret, &buffer, &stock);
+		loop(go, ret, &buffer, &stock);
 	}
 	i = 0;
 	while (stock[i] && stock[i] != '\n')

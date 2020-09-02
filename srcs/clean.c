@@ -50,7 +50,9 @@ void			clear_all(char *args, t_list **list)
 {
 	if (args)
 		free(args);
+	get_input(NULL, NULL, 0);
 	ft_lstclear(list, &free);
+	free(list);
 	free(g_pwd);
 	free(g_oldpwd);
 	free(g_home);
