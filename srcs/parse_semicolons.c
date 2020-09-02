@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 15:24:14 by atetu             #+#    #+#             */
-/*   Updated: 2020/09/02 14:48:51 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/02 15:11:26 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,8 @@ static int		arg_is_valid(char *str)
 	return (0);
 }
 
-static char		**check_args(char **tab, int n_semicolons)
+static char		**handle_error_arg(int i, int n_semicolons, char **tab)
 {
-	int			i;
-
-	i = -1;
-	while (tab[++i])
-	{
-		if (!ft_strlen(tab[i]) || !arg_is_valid(tab[i]))
-		{
-			ft_printf("error on %d\n", i);
-			if (tab[i + 1] && !ft_strlen(tab[i + 1]) && i < n_semicolons - 1)
-				ft_printf_e("bash: syntax error near unexpected token `;;'\n");
-			else
-				ft_printf_e("bash: syntax error near unexpected token `;'\n");
-			break;
-		}
-	}
 	if (i < n_semicolons)
 	{
 		i = -1;
@@ -93,6 +78,27 @@ static char		**check_args(char **tab, int n_semicolons)
 		return (NULL);
 	}
 	return (tab);
+}
+
+static char		**check_args(char **tab, int n_semicolons)
+{
+	int			i;
+
+	i = -1;
+	while (tab[++i + 1])
+	{
+		if (tab[i + 1] && !ft_strlen(tab[i + 1]) && i < n_semicolons - 1)
+		{
+			ft_printf_e("bash: syntax error near unexpected token `;;'\n");
+			break ;
+		}
+		else if (!ft_strlen(tab[i]) || !arg_is_valid(tab[i]))
+		{
+			ft_printf_e("bash: syntax error near unexpected token `;'\n");
+			break ;
+		}
+	}
+	return (handle_error_arg(i, n_semicolons, tab));
 }
 
 char			**parse_semicolon(char *str)
@@ -120,8 +126,8 @@ char			**parse_semicolon(char *str)
 	}
 	tab[j] = ft_substr(str + last_i, 0, ft_strlen(str + last_i));
 	tab[j + 1] = NULL;
-	for (int x = 0; tab[x]; x++)
-		ft_printf("tab[%d] = %s<-\n", x, tab[x]);
+	// for (int x = 0; tab[x]; x++)
+	// 	ft_printf("tab[%d] = %s<-\n", x, tab[x]);
 	tab = check_args(tab, n_semicolons);
 	return (tab);
 }
