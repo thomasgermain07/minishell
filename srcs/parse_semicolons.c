@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 15:24:14 by atetu             #+#    #+#             */
-/*   Updated: 2020/09/02 15:11:26 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/02 16:03:29 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int		get_n_semicolon(char *args, int option)
 	n_semicolon = 0;
 	while (args[++i])
 	{
-		if (args[i] == ';' && !is_valide(args, i, 1) && (i == 0 ||
+		if (args[i] == ';' && !is_valide2(args, i, 1) && (i == 0 ||
 		(i > 0 && !is_backslash(args, i - 1))))
 		{
 			if (option == 1)
@@ -56,18 +56,7 @@ static int		get_n_semicolon(char *args, int option)
 	return (result_semicolon(option, n_semicolon));
 }
 
-static int		arg_is_valid(char *str)
-{
-	int			i;
-
-	i = -1;
-	while (str[++i])
-		if (str[i] != ' ')
-			return (1);
-	return (0);
-}
-
-static char		**handle_error_arg(int i, int n_semicolons, char **tab)
+static char		**handle_error_arg(int i, int n_semicolons, char **tab) // risque de leaks sur le valgrind
 {
 	if (i < n_semicolons)
 	{
@@ -126,8 +115,6 @@ char			**parse_semicolon(char *str)
 	}
 	tab[j] = ft_substr(str + last_i, 0, ft_strlen(str + last_i));
 	tab[j + 1] = NULL;
-	// for (int x = 0; tab[x]; x++)
-	// 	ft_printf("tab[%d] = %s<-\n", x, tab[x]);
 	tab = check_args(tab, n_semicolons);
 	return (tab);
 }

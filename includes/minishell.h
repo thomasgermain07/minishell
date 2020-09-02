@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/31 15:45:30 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/02 17:17:03 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <string.h>
 # include <signal.h>
 
-# define REPLACE_CHAR "\\\"'$"
+# define PARENT_ERR "can't access to parent directory"
 
 typedef	struct		s_call
 {
@@ -62,7 +62,7 @@ void				control_quit(int sig);
 void				prompt(char **env);
 char				**parse_semicolon(char *str);
 int					get_n_pipes(char *args, int option);
-void				parse_pipes(char *str, t_call *calls);
+int					parse_pipes(char *str, t_call *calls);
 void				parse_call(t_call *call, t_list **env);
 int					create_pipes(t_call *calls, int pipes[][2]);
 void				connect_pipes(t_call *calls, int pipes[][2], int n_pipes);
@@ -93,6 +93,7 @@ t_list				**tab_to_list(char **env);
 char				**list_to_tab(t_list **lst);
 void				print(void);
 int					is_valide(char *str, int index, int option);
+int					is_valide2(char *str, int index, int option);
 int					is_backslash(char *str, int index);
 int					known_func(char *str);
 char				*find_value(char *str, t_list **env, int opt);
@@ -144,5 +145,6 @@ int					check_third_weird_char_parenthesis(char *str, int i,
 	int **error);
 int					check_weird_char(char **str, int i, int *error);
 void				add_env2(t_call *call, char *key, char *value);
+int					arg_is_valid(char *str);
 
 #endif
