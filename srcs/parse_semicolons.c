@@ -6,14 +6,15 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 15:24:14 by atetu             #+#    #+#             */
-/*   Updated: 2020/09/02 16:03:29 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/03 15:54:15 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int		syntax_error(void)
+static int		syntax_error(char **str)
 {
+	free(*str);
 	g_exit_status = 2;
 	g_exit_nb = 2;
 	ft_printf_e("minihell: syntax error near unexpected token ';'\n");
@@ -32,16 +33,21 @@ static int		get_n_semicolon(char *args, int option)
 	int			i;
 	int			n_semicolon;
 	int			j;
+	char		*temp;
 
+	parse_backslash((temp = ft_strdup(args)));
 	i = -1;
 	n_semicolon = 0;
-	while (args[++i])
+	while (temp[++i])
 	{
-		if (args[i] == ';' && !is_valide2(args, i, 1) && (i == 0 ||
-		(i > 0 && !is_backslash(args, i - 1))))
+		if (temp[i] == ';' && !is_valide(temp, i, 1) && (i == 0 ||
+		(i > 0 && temp[i - 1] != -1)))
 		{
 			if (option == 1)
+			{
+				free(temp);
 				return (i);
+			}
 			if (i > 0)
 			{
 				j = i - 1;
@@ -49,10 +55,11 @@ static int		get_n_semicolon(char *args, int option)
 					j--;
 			}
 			if (args[j] == '>' || args[j] == '<')
-				return (syntax_error());
+				return (syntax_error(&temp));
 			n_semicolon++;
 		}
 	}
+	free(temp);
 	return (result_semicolon(option, n_semicolon));
 }
 
@@ -86,6 +93,11 @@ static char		**check_args(char **tab, int n_semicolons)
 			ft_printf_e("bash: syntax error near unexpected token `;'\n");
 			break ;
 		}
+	}
+	if (!ft_strlen(tab[n_semicolons]) && i == n_semicolons)
+	{
+		free(tab[n_semicolons + 1]);
+		tab[n_semicolons] = NULL;
 	}
 	return (handle_error_arg(i, n_semicolons, tab));
 }

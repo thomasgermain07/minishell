@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/16 10:53:30 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/02 17:17:03 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/03 15:31:56 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <signal.h>
 
 # define PARENT_ERR "can't access to parent directory"
+# define SYNTAX_ERR "sytanx error near unexpected token"
 
 typedef	struct		s_call
 {
@@ -146,5 +147,6 @@ int					check_third_weird_char_parenthesis(char *str, int i,
 int					check_weird_char(char **str, int i, int *error);
 void				add_env2(t_call *call, char *key, char *value);
 int					arg_is_valid(char *str);
+void				parse_backslash(char *str);
 
 #endif

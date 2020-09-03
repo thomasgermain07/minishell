@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 21:49:31 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/02 16:57:40 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/03 15:46:04 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,30 @@ int				get_n_pipes(char *args, int option)
 {
 	int			i;
 	int			n_pipes;
+	char		*temp;
 
+	parse_backslash((temp = ft_strdup(args)));
 	i = -1;
 	n_pipes = 0;
-	while (args[++i])
+	while (temp[++i])
 	{
-		if (args[i] == '|' && !is_valide2(args, i, 1) && (i == 0 ||
-			(i > 0 && !is_backslash(args, i - 1))))
+		if (temp[i] == '|' && !is_valide(temp, i, 1) && (i == 0 ||
+			(i > 0 && temp[i - 1] != -1)))
 		{
 			if (option == 1)
+			{
+				free(temp);
 				return (i);
+			}
 			n_pipes++;
 		}
 	}
 	if (option == 1)
+	{
+		free(temp);
 		return (-1);
+	}
+	free(temp);
 	return (n_pipes);
 }
 
