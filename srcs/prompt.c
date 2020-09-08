@@ -3,53 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 22:27:19 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/02 16:16:41 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/07 16:02:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static t_call	*init_array(char *str)
+static int		result_exec_input(t_call *calls, int **pipes, int n_pipes,
+					int exit_info)
 {
-	t_call		*calls;
-	if (!(calls = malloc(sizeof(t_call) * (get_n_pipes(str, 0) + 2))))
-		return (NULL);
-	if (!(g_pids = malloc(sizeof(pid_t) * (get_n_pipes(str, 0) + 2))))
-	{
-		ft_printf_e("minishell: error: malloc failed\n");
-		return (NULL);
-	}
-	return (calls);
+	clean_calls(calls);
+	clean_pipes(pipes, n_pipes);
+	free(g_pids);
+	if (exit_info == 1)
+		return (-1);
+	return (0);
 }
 
 static int		exec_input(char *str, t_list **env)
 {
 	t_call		*calls;
-	int			pipes[get_n_pipes(str, 0)][2]; // a modifier
+	int			**pipes;
 	int			i;
 	int			exit_info;
+	int			n_pipes;
 
 	i = -1;
 	exit_info = 0;
 	if (!(calls = init_array(str)))
 		return (-1);
+	pipes = NULL;
+	n_pipes = get_n_pipes(str, 0);
+	if (!(init_pipes(n_pipes, &pipes)))
+		return (result_exec_input(calls, pipes, n_pipes, -1));
 	g_pids[get_n_pipes(str, 0) + 1] = 0;
 	if (parse_pipes(str, calls) == -1)
-		return (0);
+		return (result_exec_input(calls, pipes, n_pipes, 0));
 	while (calls[++i].str)
 		parse_call(&calls[i], env);
 	if (i > 1)
 		manage_pipes(calls, pipes, str, &exit_info);
 	else
 		exec2(&calls[0], &exit_info);
-	clean_calls(calls);
-	free(g_pids);
-	if (exit_info == 1)
-		return (-1);
-	return (0);
+	return (result_exec_input(calls, pipes, n_pipes, exit_info));
 }
 
 int				parse_args(char *args, t_list **list)
@@ -84,11 +83,6 @@ void			set_g_home(t_list **list)
 		g_home = ft_strdup("");
 }
 
-void			print(void)
-{
-	ft_printf_e("\033[1;32mMINISHELL \033[0m👉 ");
-}
-
 void			prompt(char **env)
 {
 	char		*args;
@@ -102,6 +96,7 @@ void			prompt(char **env)
 	while (1)
 	{
 		g_pids = NULL;
+		g_error = 0;
 		print();
 		if (!get_input(&args, &go_on, 1))
 			if (control_d())

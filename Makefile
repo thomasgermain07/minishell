@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
+#    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 08:26:20 by thgermai          #+#    #+#              #
-#    Updated: 2020/08/31 14:09:10 by thgermai         ###   ########.fr        #
+#    Updated: 2020/09/07 17:42:13 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,13 @@ NAME = minishell
 SRCSDIR = srcs
 OBJSDIR = .objs
 SRCS = main.c\
-		builtin.c\
+		builtin_cd_pwd.c\
+		builtin_echo.c\
 		builtin_env.c\
 		builtin_env_utiles.c\
+		builtin_env_add.c\
+		builtin_env_export.c\
+		builtin_env_unset.c\
 		builtin_exit.c\
 		clean.c\
 		execute.c\
@@ -26,10 +30,14 @@ SRCS = main.c\
 		parse_exec.c\
 		parse_pipes.c\
 		parse_semicolons.c\
+		parse_semicolons_utiles.c\
+		parse_semicolons_utiles_errors.c\
 		prompt.c\
+		prompt_utiles.c\
 		shlvl.c\
 		signal.c\
 		utiles.c\
+		utiles_is_valid.c\
 		utiles_convert.c\
 		parse_global.c\
 		parse_call_utiles.c\
@@ -43,9 +51,6 @@ SRCS = main.c\
 		parse_global_var_weird_utiles.c\
 		parse_global_var_utiles.c\
 		parse_global_args.c\
-		builtin_env_add.c\
-		builtin_env_export.c\
-		builtin_env_unset.c\
 		get_input.c
 OBJS = $(addprefix $(OBJSDIR)/, $(SRCS:.c=.o))
 DPDCS = $(OBJS:.o=.d)
